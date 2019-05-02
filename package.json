@@ -2,9 +2,9 @@
   "name": "dc-integrations-algolia",
   "version": "1.0.0-develop",
   "description": "DC Integration - Algolia",
-  "main": "src/index.js",
   "scripts": {
-    "commit": "npx git-cz"
+    "commit": "npx git-cz",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -24,12 +24,19 @@
   },
   "homepage": "https://github.com/amplience/dc-integrations-algolia#readme",
   "devDependencies": {
+    "@types/express": "^4.16.1",
     "commitizen": "^3.1.1",
-    "cz-conventional-changelog": "^2.1.0"
+    "cz-conventional-changelog": "^2.1.0",
+    "ts-node": "^8.1.0",
+    "tsconfig-paths": "^3.8.0",
+    "typescript": "^3.4.5"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "express": "^4.16.4"
   }
 }
