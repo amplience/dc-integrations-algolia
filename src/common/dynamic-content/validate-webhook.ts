@@ -1,8 +1,12 @@
-import {WebhookSignature} from "dc-management-sdk-js";
-import express = require("express");
+import { WebhookSignature } from 'dc-management-sdk-js';
+import * as express from 'express';
 
 export class ValidateWebhook {
-  static verifySignature(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public static verifySignature(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): express.Response {
     if (!process.env.WEBHOOK_SECRET) {
       res.status(401).send();
       throw new Error('WEBHOOK_SECRET not defined in environment');
