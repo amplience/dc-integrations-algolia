@@ -4,7 +4,8 @@
   "description": "DC Integration - Algolia",
   "scripts": {
     "commit": "npx git-cz",
-    "start": "ts-node -r tsconfig-paths/register src/index.ts"
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start:dev": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "@types/express": "^4.16.1",
     "commitizen": "^3.1.1",
     "cz-conventional-changelog": "^2.1.0",
+    "nodemon": "^1.19.0",
     "ts-node": "^8.1.0",
     "tsconfig-paths": "^3.8.0",
     "typescript": "^3.4.5"
