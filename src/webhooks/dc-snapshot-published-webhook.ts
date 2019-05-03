@@ -1,14 +1,14 @@
-import * as express from 'express';
-import { plainToClass } from 'class-transformer';
-import * as debug from 'debug';
-import { WebhookRequest } from '../dynamic-content/models/webhook-request';
-import { UnsupportedWebhookError } from '../errors/unsupported-webhook-error';
-import { validate } from 'class-validator';
-import { InvalidWebhookRequestError } from '../errors/invalid-webhook-request-error';
-const log = debug('dc-snasphot-published-webhook');
+import * as express from "express";
+import { plainToClass } from "class-transformer";
+import * as debug from "debug";
+import { WebhookRequest } from "../dynamic-content/models/webhook-request";
+import { UnsupportedWebhookError } from "../errors/unsupported-webhook-error";
+import { validate } from "class-validator";
+import { InvalidWebhookRequestError } from "../errors/invalid-webhook-request-error";
+const log = debug("dc-snasphot-published-webhook");
 
 export class DCSnapshotPublishedWebhook {
-  static readonly SUPPORTED_WEBHOOK_NAME = 'dynamic-content.snapshot.published';
+  static readonly SUPPORTED_WEBHOOK_NAME = "dynamic-content.snapshot.published";
 
   public async processWebhook(webhook: WebhookRequest): Promise<boolean> {
     const validationErrors = await validate(webhook);
@@ -20,13 +20,18 @@ export class DCSnapshotPublishedWebhook {
       throw new UnsupportedWebhookError(webhook);
     }
 
-    log('Received webhook: %j', webhook);
+    log("Received webhook: %j", webhook);
     return true;
   }
 }
 
-export const expressHandler = (req: express.Request, res: express.Response) => {
+export const expressHandler = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   const handler = new DCSnapshotPublishedWebhook();
-  const response = handler.processWebhook(plainToClass(WebhookRequest, <object>req.body));
+  const response = await handler.processWebhook(
+    plainToClass(WebhookRequest, <object>req.body)
+  );
   res.send(response);
 };
