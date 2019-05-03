@@ -1,6 +1,8 @@
+import 'reflect-metadata';
 import * as debug from 'debug';
 import * as express from 'express';
-import { ValidateWebhook } from './common/dynamic-content/validate-webhook';
+import { ValidateWebhookSignature } from './middleware/validate-webhook-signature';
+import { expressHandler } from './webhooks/dc-snapshot-published-webhook';
 
 const PORT: number = Number(process.env.PORT) || 3000;
 const DC_CLIENT_ID: string = process.env.DC_CLIENT_ID;
@@ -8,39 +10,9 @@ const DC_CLIENT_SECRET: string = process.env.DC_CLIENT_SECRET;
 
 const log = debug('dc-integrations-algolia:app');
 const app = express();
+const router = express.Router();
 
-// middleware to ensure the content-type is application/json
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-  if (!req.is('json')) {
-    return res.status(406).send();
-  }
-  next();
-});
+router.post('/webhook', ValidateWebhookSignature.middleware(process.env.WEBHOOK_SECRET), expressHandler);
 
-// middleware to get the json from the request bodyapp.use(
-app.use(
-  express.json({
-    verify: (req: express.Request, res: express.Response, buf: Buffer, encoding: string) => {
-      req.rawBody = buf;
-      req.bodyEncoding = encoding;
-    }
-  })
-);
-
-// middleware error handler
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  if (err) {
-    return res.status(400).send();
-  }
-  next();
-});
-
-app.post('/webhook', ValidateWebhook.verifySignature, (req: express.Request, res: express.Response) => {
-  const requestBody = req.rawBody;
-
-  // get the root content item from dc
-
-  res.status(200).send(requestBody);
-});
-
+app.use('/', router);
 app.listen(PORT, () => log(`Listening on port ${PORT}!`));
