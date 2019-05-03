@@ -1,6 +1,4 @@
 import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as crypto from "crypto";
 import {ValidateWebhook} from "./common/dynamic-content/validate-webhook";
 
 const PORT: number = parseInt(process.env.PORT) || 3000;
@@ -18,8 +16,8 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 });
 
 // middleware to get the json from the request body
-app.use(bodyParser.json({
-  verify: (req: express.Request, res: express.Response, buf: Buffer, encoding: crypto.Utf8AsciiLatin1Encoding) => {
+app.use(express.json({
+  verify: (req: express.Request, res: express.Response, buf: Buffer, encoding: string) => {
     req.rawBody = buf;
     req.bodyEncoding = encoding;
   }
