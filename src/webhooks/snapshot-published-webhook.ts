@@ -11,7 +11,6 @@ import { UnsupportedWebhookError } from '../errors/unsupported-webhook-error';
 const log = debug('dc-snasphot-published-webhook');
 
 export interface SnapshotPublishedWebhookPresenter<T> {
-
   invalidWebhookRequestError(webhook: WebhookRequest): T;
 
   unsupportedWebhookError(webhook: WebhookRequest): T;
@@ -30,8 +29,10 @@ export class SnapshotPublishedWebhookRequest {
 export class SnapshotPublishedWebhook {
   public static readonly SUPPORTED_WEBHOOK_NAME = 'dynamic-content.snapshot.published';
 
-  public static async processWebhook<T>(request: SnapshotPublishedWebhookRequest,
-                                        presenter: SnapshotPublishedWebhookPresenter<T>): Promise<T> {
+  public static async processWebhook<T>(
+    request: SnapshotPublishedWebhookRequest,
+    presenter: SnapshotPublishedWebhookPresenter<T>
+  ): Promise<T> {
     const validationErrors = await validate(request.webhook);
 
     if (validationErrors.length > 0) {
@@ -58,7 +59,8 @@ export class SnapshotPublishedWebhook {
 }
 
 export const expressHandler = (req: express.Request, res: express.Response) => {
-  const request = new SnapshotPublishedWebhookRequest({
+  const request = new SnapshotPublishedWebhookRequest(
+    {
       clientId: process.env.DC_CLIENT_ID,
       clientSecret: process.env.DC_CLIENT_SECRET
     },
@@ -68,10 +70,10 @@ export const expressHandler = (req: express.Request, res: express.Response) => {
       indexName: process.env.ALGOLIA_INDEX_NAME
     },
     plainToClass(WebhookRequest, req.body as object)
-    );
+  );
   const handler = new SnapshotPublishedWebhook();
 
-  const presenter = new class implements SnapshotPublishedWebhookPresenter<void> {
+  const presenter = new (class implements SnapshotPublishedWebhookPresenter<void> {
     invalidWebhookRequestError(webhook: WebhookRequest): void {
       throw new InvalidWebhookRequestError(webhook);
     }
@@ -83,7 +85,6 @@ export const expressHandler = (req: express.Request, res: express.Response) => {
     unsupportedWebhookError(webhook: WebhookRequest): void {
       throw new UnsupportedWebhookError(webhook);
     }
-
-  }();
+  })();
   SnapshotPublishedWebhook.processWebhook(request, presenter);
 };

@@ -1,7 +1,6 @@
-import {ContentItem} from 'dc-management-sdk-js';
-import {Snapshot} from '../dynamic-content/models/snapshot';
-import {WebhookRequest} from '../dynamic-content/models/webhook-request';
-import {InvalidWebhookRequestError} from '../errors/invalid-webhook-request-error';
+import { ContentItem } from 'dc-management-sdk-js';
+import { Snapshot } from '../dynamic-content/models/snapshot';
+import { WebhookRequest } from '../dynamic-content/models/webhook-request';
 import {
   SnapshotPublishedWebhook,
   SnapshotPublishedWebhookPresenter,
@@ -12,7 +11,7 @@ const mockDynamicContent = jest.fn();
 jest.mock('dc-management-sdk-js', () => {
   return {
     ...jest.requireActual('dc-management-sdk-js'),
-    DynamicContent() {
+    DynamicContent: function() {
       return mockDynamicContent.apply(null, arguments);
     }
   };
@@ -20,7 +19,7 @@ jest.mock('dc-management-sdk-js', () => {
 
 const mockAlgoliasearch = jest.fn();
 jest.mock('algoliasearch', () => {
-  return function () {
+  return function() {
     return mockAlgoliasearch.apply(null, arguments);
   };
 });
@@ -34,68 +33,99 @@ describe('DCSnapshotPublishedWebhook spec', () => {
   const ALGOLIA_INDEX_NAME = 'ALGOLIA_INDEX_NAME';
 
   const UNSUPPORTED_WEBHOOK_ERROR = 'unsupportedWebhookError';
+  const INVALID_WEBHOOK_REQUEST_ERROR = 'invalidWebhookRequestError';
+  const SUCCESSUL_RESPONSE = 'successful';
 
-  const fakePresenter = new class implements SnapshotPublishedWebhookPresenter<string> {
+  const fakePresenter = new (class implements SnapshotPublishedWebhookPresenter<string> {
     invalidWebhookRequestError(webhook: WebhookRequest): string {
-      return 'invalidWebhookRequestError';
+      return INVALID_WEBHOOK_REQUEST_ERROR;
     }
 
     successful(): string {
-      return 'successful';
+      return SUCCESSUL_RESPONSE;
     }
 
     unsupportedWebhookError(webhook: WebhookRequest): string {
       return UNSUPPORTED_WEBHOOK_ERROR;
     }
-  }();
+  })();
 
   let unsupportedWebhookErrorSpy;
+  let invalidWebhookRequestError;
+  let successfulResponse;
   beforeEach(() => {
     unsupportedWebhookErrorSpy = jest.spyOn(fakePresenter, 'unsupportedWebhookError');
+    invalidWebhookRequestError = jest.spyOn(fakePresenter, 'invalidWebhookRequestError');
+    successfulResponse = jest.spyOn(fakePresenter, 'successful');
   });
 
   describe('invalid webhook requests', () => {
     it('should throw an exception for unsupported webhook events', async () => {
-      const request = new SnapshotPublishedWebhookRequest({
-        clientId: DC_CLIENT_ID,
-        clientSecret: DC_CLIENT_SECRET
-      }, {
-        apiKey: ALGOLIA_API_KEY,
-        applicationId: ALGOLIA_APPLICATION_ID,
-        indexName: ALGOLIA_INDEX_NAME
-      }, new WebhookRequest({
-        name: 'unsupported',
-        payload: new Snapshot({id: 'snapshot-id', rootContentItem: {id: 'content-item-id'}})
-      }));
+      const request = new SnapshotPublishedWebhookRequest(
+        {
+          clientId: DC_CLIENT_ID,
+          clientSecret: DC_CLIENT_SECRET
+        },
+        {
+          apiKey: ALGOLIA_API_KEY,
+          applicationId: ALGOLIA_APPLICATION_ID,
+          indexName: ALGOLIA_INDEX_NAME
+        },
+        new WebhookRequest({
+          name: 'unsupported',
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        })
+      );
       const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
 
       expect(response).toEqual(UNSUPPORTED_WEBHOOK_ERROR);
       expect(unsupportedWebhookErrorSpy).toHaveBeenCalled();
     });
 
-    /*it('should throw an exception for missing webhook name', async () => {
-      const webhookRequest = new WebhookRequest({});
-      try {
-        await SnapshotPublishedWebhook.processWebhook(webhookRequest);
-        fail('Expecting an exception to be thrown');
-      } catch (e) {
-        expect(e).toBeInstanceOf(InvalidWebhookRequestError);
-      }
+    it('should throw an exception for missing webhook name', async () => {
+      const request = new SnapshotPublishedWebhookRequest(
+        {
+          clientId: DC_CLIENT_ID,
+          clientSecret: DC_CLIENT_SECRET
+        },
+        {
+          apiKey: ALGOLIA_API_KEY,
+          applicationId: ALGOLIA_APPLICATION_ID,
+          indexName: ALGOLIA_INDEX_NAME
+        },
+        new WebhookRequest({
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        })
+      );
+      const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
+
+      expect(response).toEqual(INVALID_WEBHOOK_REQUEST_ERROR);
+      expect(invalidWebhookRequestError).toHaveBeenCalled();
     });
 
     it('should throw an exception for missing webhook payload', async () => {
-      const webhookRequest = new WebhookRequest({
-        name: DCSnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME
-      });
-      try {
-        await SnapshotPublishedWebhook.processWebhook(webhookRequest);
-        fail('Expecting an exception to be thrown');
-      } catch (e) {
-        expect(e).toBeInstanceOf(InvalidWebhookRequestError);
-      }
-    });*/
+      const request = new SnapshotPublishedWebhookRequest(
+        {
+          clientId: DC_CLIENT_ID,
+          clientSecret: DC_CLIENT_SECRET
+        },
+        {
+          apiKey: ALGOLIA_API_KEY,
+          applicationId: ALGOLIA_APPLICATION_ID,
+          indexName: ALGOLIA_INDEX_NAME
+        },
+        new WebhookRequest({
+          name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME
+        })
+      );
+
+      const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
+
+      expect(response).toEqual(INVALID_WEBHOOK_REQUEST_ERROR);
+      expect(invalidWebhookRequestError).toHaveBeenCalled();
+    });
   });
-/*
+
   describe('validate webhook', () => {
     it('should add the DC Snapshots root ContentItem to the Aloglia index', async () => {
       const mockGetContentItems = jest.fn();
@@ -129,12 +159,23 @@ describe('DCSnapshotPublishedWebhook spec', () => {
         initIndex: mockInitIndex
       });
 
-      const webhookRequest = new WebhookRequest({
-        name: DCSnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new Snapshot({id: 'snapshot-id', rootContentItem: {id: 'content-item-id'}})
-      });
+      const request = new SnapshotPublishedWebhookRequest(
+        {
+          clientId: DC_CLIENT_ID,
+          clientSecret: DC_CLIENT_SECRET
+        },
+        {
+          apiKey: ALGOLIA_API_KEY,
+          applicationId: ALGOLIA_APPLICATION_ID,
+          indexName: ALGOLIA_INDEX_NAME
+        },
+        new WebhookRequest({
+          name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        })
+      );
 
-      const result = await SnapshotPublishedWebhook.processWebhook(webhookRequest);
+      const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
 
       expect(mockDynamicContent).toHaveBeenCalledWith({
         client_id: DC_CLIENT_ID,
@@ -144,10 +185,10 @@ describe('DCSnapshotPublishedWebhook spec', () => {
 
       expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
-      expect(mockAddObject).toHaveBeenCalledWith({...contentItem.body, objectID: contentItem.id});
+      expect(mockAddObject).toHaveBeenCalledWith({ ...contentItem.body, objectID: contentItem.id });
 
-      expect(result).toEqual(true);
+      expect(response).toEqual(SUCCESSUL_RESPONSE);
+      expect(successfulResponse).toHaveBeenCalled();
     });
   });
-    */
 });
