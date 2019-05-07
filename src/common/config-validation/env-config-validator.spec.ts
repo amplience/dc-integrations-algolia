@@ -25,7 +25,7 @@ describe('env-config-validator', () => {
         ALGOLIA_APP_ID: 'algolia-app-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
-        DC_SECRET: 'dc-secret'
+        DC_CLIENT_SECRET: 'dc-secret'
       });
       expect(validateSpy.mock.results[0].value.error).toBe(null);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
@@ -36,7 +36,7 @@ describe('env-config-validator', () => {
         ALGOLIA_APP_ID: 'algolia-app-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
-        DC_SECRET: 'dc-secret',
+        DC_CLIENT_SECRET: 'dc-secret',
         IGNORE_ME: 'im-not-here'
       });
       expect(validateSpy.mock.results[0].value.error).toBe(null);
@@ -52,7 +52,7 @@ describe('env-config-validator', () => {
         DC_CLIENT_ID: 'dc-client-id'
       });
       expect(validateSpy.mock.results[0].value.error).toBeDefined();
-      expect(validateSpy.mock.results[0].value.error.details[0].message).toEqual('"DC_SECRET" is required');
+      expect(validateSpy.mock.results[0].value.error.details[0].message).toEqual('"DC_CLIENT_SECRET" is required');
       expect(processExitSpy).toHaveBeenCalledWith(1);
     });
     it('should exit the process if a required config value is empty', () => {
@@ -61,11 +61,11 @@ describe('env-config-validator', () => {
         ALGOLIA_APP_ID: 'algolia-app-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
-        DC_SECRET: ''
+        DC_CLIENT_SECRET: ''
       });
       expect(validateSpy.mock.results[0].value.error).toBeDefined();
       expect(validateSpy.mock.results[0].value.error.details[0].message).toEqual(
-        '"DC_SECRET" is not allowed to be empty'
+        '"DC_CLIENT_SECRET" is not allowed to be empty'
       );
       expect(processExitSpy).toHaveBeenCalledWith(1);
     });

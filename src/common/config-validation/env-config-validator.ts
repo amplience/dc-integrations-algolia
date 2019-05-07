@@ -1,4 +1,7 @@
 import * as Joi from '@hapi/joi';
+import * as debug from 'debug';
+
+const log = debug('dc-integrations-algolia:env-config-validator');
 
 export interface EnvConfig {
   [key: string]: string;
@@ -12,14 +15,14 @@ export class EnvConfigValidator {
         ALGOLIA_APP_ID: Joi.string().required(),
         ALGOLIA_INDEX_NAME: Joi.string().required(),
         DC_CLIENT_ID: Joi.string().required(),
-        DC_SECRET: Joi.string().required()
+        DC_CLIENT_SECRET: Joi.string().required()
       })
       .unknown();
     const result = Joi.validate(envConfig, envSchema);
 
     if (result.error !== null) {
       const envErrors = result.error.details.map(detail => detail.message);
-      console.log('Environment configuration error:', ...envErrors);
+      log('Environment configuration error:', ...envErrors);
       process.exit(1);
     }
   }
