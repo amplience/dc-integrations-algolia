@@ -71,7 +71,6 @@ export const expressHandler = (req: express.Request, res: express.Response) => {
     },
     plainToClass(WebhookRequest, req.body as object)
   );
-  const handler = new SnapshotPublishedWebhook();
 
   const presenter = new (class implements SnapshotPublishedWebhookPresenter<void> {
     invalidWebhookRequestError(webhook: WebhookRequest): void {
