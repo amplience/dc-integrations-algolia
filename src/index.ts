@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import { EnvConfigValidator } from './common/config-validation/env-config-validator';
 import { DefaultErrorHandler } from './middleware/default-error-handler';
 import { ValidateWebhookSignature } from './middleware/validate-webhook-signature';
-import { expressHandler } from './webhooks/dc-snapshot-published-webhook';
+import { expressHandler } from './webhooks/snapshot-published-webhook';
 
 dotenv.config();
 
