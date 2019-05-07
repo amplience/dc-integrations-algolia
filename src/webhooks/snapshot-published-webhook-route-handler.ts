@@ -1,13 +1,11 @@
-import * as express from './snapshot-published-webhook';
+import * as express from 'express';
 import { plainToClass } from 'class-transformer';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
 import { InvalidWebhookRequestError } from '../errors/invalid-webhook-request-error';
 import { UnsupportedWebhookError } from '../errors/unsupported-webhook-error';
 import { DynamicContentRequestError } from '../errors/dynamic-content-request-error';
 import { AlgoliaSearchRequestError } from '../errors/algolia-search-request-error';
-import { SnapshotPublishedWebhookRequest } from './snapshot-published-webhook';
-import { SnapshotPublishedWebhookPresenter } from './snapshot-published-webhook';
-import { SnapshotPublishedWebhook } from './snapshot-published-webhook';
+import { SnapshotPublishedWebhookRequest, SnapshotPublishedWebhook } from './snapshot-published-webhook';
 
 export interface SnapshotPublishedWebhookPresenter<T> {
   invalidWebhookRequestError(webhook: WebhookRequest): T;
