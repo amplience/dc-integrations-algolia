@@ -1,11 +1,8 @@
 import { ContentItem } from 'dc-management-sdk-js';
 import { Snapshot } from '../dynamic-content/models/snapshot';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
-import {
-  SnapshotPublishedWebhook,
-  SnapshotPublishedWebhookPresenter,
-  SnapshotPublishedWebhookRequest
-} from './snapshot-published-webhook';
+import { SnapshotPublishedWebhook, SnapshotPublishedWebhookRequest } from './snapshot-published-webhook';
+import { SnapshotPublishedWebhookPresenter } from './snapshot-published-webhook-route-handler';
 
 const mockDynamicContent = jest.fn();
 jest.mock('dc-management-sdk-js', () => {

@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import { EnvConfigValidator } from './common/config-validation/env-config-validator';
 import { DefaultErrorHandler } from './middleware/default-error-handler';
 import { ValidateWebhookSignature } from './middleware/validate-webhook-signature';
-import { expressHandler } from './webhooks/snapshot-published-webhook';
+import { snapshotPublishedWebhookRouteHandler } from './webhooks/snapshot-published-webhook-route-handler';
 import { DcCredentialsValidator } from './common/config-validation/dc-credentials-validator';
 
 dotenv.config();
@@ -31,7 +31,11 @@ const log = debug('dc-integrations-algolia:app');
   const app = express();
   const router = express.Router();
 
-  router.post('/webhook', ValidateWebhookSignature.middleware(process.env.WEBHOOK_SECRET), expressHandler);
+  router.post(
+  '/webhook',
+  ValidateWebhookSignature.middleware(process.env.WEBHOOK_SECRET),
+  snapshotPublishedWebhookRouteHandler
+);
 
   app.use('/', router);
   app.use(DefaultErrorHandler.handleError);
