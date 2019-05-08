@@ -8,6 +8,10 @@
 
 This project is a sample webhook integration that demonstrates how you can keep your Algolia Search index up-to-date with published content from Dynamic Content.
 
+The structure of this project follows the [model-view-presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) programming pattern to not only showcase error handling and client responses, but to also make it easier to test individual components.
+
+Our aim when writing the project in this way was to make components reusable, so that when developers make their own implementation our example would be easy to understand and replicable. 
+
 ## _Warning_ 
 
 * These following steps are just demonstrating how you can run this application for DEVELOPMENT purposes only.
@@ -119,6 +123,7 @@ Publishing a content item should now trigger your Algolia integration to be invo
 ```
 
 ## Built with
+* [Express](https://www.npmjs.com/package/express) - API framework
 * [Amplience Dynamic Content SDK](https://www.npmjs.com/package/dc-management-sdk-js) - Used for fetching content from the Amplience Dynamic Content service.
 * [Algolia Search API Client](https://www.npmjs.com/package/algoliasearch) - Used to add content to an Algolia search index.
 
