@@ -1,9 +1,9 @@
+import { NextHandleFunction } from 'connect';
 import { WebhookSignature } from 'dc-management-sdk-js';
 import * as express from 'express';
-import { HttpError } from '../errors/http-error.interface';
 
-export class ValidateWebhookSignature {
-  public static middleware(webhooksecret) {
+export default class ValidateWebhookSignature {
+  public static middleware(webhooksecret): NextHandleFunction {
     return express.json({
       type: () => true,
       verify: (req: express.Request, res: express.Response, buf: Buffer, encoding: string) => {
