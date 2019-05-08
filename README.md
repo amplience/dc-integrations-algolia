@@ -14,7 +14,7 @@ This project is a sample webhook integration that demonstrates how you can keep 
 
 * This application DOES NOT come with a warranty/support. We are not responsible for the outcome of this integration.
 
-* DO NOT run this application in an production environment - this integration is a sample/example integration.
+* DO NOT run this application in a production environment - this integration is a sample/example integration.
 
 ## Main Features
 
