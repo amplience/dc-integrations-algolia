@@ -1,4 +1,4 @@
-# Contribution guide
+# Contributing
 
 ## Developing dc-integrations-algolia
 
