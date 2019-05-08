@@ -5,6 +5,7 @@
 > A sample [Amplience Dynamic Content]((https://amplience.com/dynamic-content)) integration for [Algolia Search API](https://www.algolia.com/products/search/)
 
 ![License - Apache 2](https://img.shields.io/badge/license-Apache%202-blue.svg)
+![](https://img.shields.io/badge/node-v8%2B-blue.svg) 
 
 This project is a sample webhook integration that demonstrates how you can keep your Algolia Search index up-to-date with published content from Dynamic Content.
 
