@@ -1,4 +1,3 @@
-import { DynamicContent } from 'dc-management-sdk-js';
 import { DcCredentialsValidator } from './dc-credentials-validator';
 
 const mockDynamicContent = jest.fn();
