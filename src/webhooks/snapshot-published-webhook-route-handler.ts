@@ -22,7 +22,11 @@ export const snapshotPublishedWebhookRouteHandler = (req: express.Request, res: 
       applicationId: process.env.ALGOLIA_APPLICATION_ID,
       indexName: process.env.ALGOLIA_INDEX_NAME
     },
-    plainToClass(WebhookRequest, req.body as object)
+    plainToClass(WebhookRequest, req.body as object),
+    {
+      apiUrl: process.env.DC_API_URL,
+      authUrl: process.env.DC_AUTH_URL
+    }
   );
 
   const presenter = new (class implements SnapshotPublishedWebhookPresenter<void> {

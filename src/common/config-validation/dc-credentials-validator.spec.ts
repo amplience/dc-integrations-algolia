@@ -5,7 +5,7 @@ const mockDynamicContent = jest.fn();
 jest.mock('dc-management-sdk-js', () => {
   return {
     ...jest.requireActual('dc-management-sdk-js'),
-    DynamicContent() {
+    DynamicContent: function DynamicContent() {
       return mockDynamicContent.apply(null, arguments);
     }
   };

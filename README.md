@@ -37,11 +37,18 @@ Configuration values required to run the application should be saved in a `.env`
 
 ```bash
 DC_CLIENT_ID=my-dc-client-id
-DC_SECRET=my-dc-secret
+DC_CLIENT_SECRET=my-dc-secret
 WEBHOOK_SECRET=dc-webhook-secret
-ALGOLIA_APP_ID=my-app-id
+ALGOLIA_APPLICATION_ID=my-app-id
 ALGOLIA_API_KEY=my-api-key
 ALGOLIA_INDEX_NAME=my-index-name
+```
+
+#### 1.1 Using a different Dynamic Content environment
+You can override the Dynamic Content API and Amplience Auth URLs by defining these optional environment variables:
+```bash
+DC_API_URL=https://...
+DC_AUTH_URL=https://...
 ```
 
 ### 2. Start the application

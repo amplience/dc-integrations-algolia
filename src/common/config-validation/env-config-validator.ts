@@ -12,7 +12,7 @@ export class EnvConfigValidator {
     const envSchema = Joi.object()
       .keys({
         ALGOLIA_API_KEY: Joi.string().required(),
-        ALGOLIA_APP_ID: Joi.string().required(),
+        ALGOLIA_APPLICATION_ID: Joi.string().required(),
         ALGOLIA_INDEX_NAME: Joi.string().required(),
         DC_CLIENT_ID: Joi.string().required(),
         DC_CLIENT_SECRET: Joi.string().required()

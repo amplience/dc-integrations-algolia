@@ -22,7 +22,7 @@ describe('env-config-validator', () => {
     it('should pass through when all required config values exist', () => {
       EnvConfigValidator.validateEnvironment({
         ALGOLIA_API_KEY: 'algolia-api-key',
-        ALGOLIA_APP_ID: 'algolia-app-id',
+        ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: 'dc-secret'
@@ -33,7 +33,7 @@ describe('env-config-validator', () => {
     it('should pass through when all required config values exist and ignore unknown value', () => {
       EnvConfigValidator.validateEnvironment({
         ALGOLIA_API_KEY: 'algolia-api-key',
-        ALGOLIA_APP_ID: 'algolia-app-id',
+        ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: 'dc-secret',
@@ -47,7 +47,7 @@ describe('env-config-validator', () => {
     it('should exit the process if a required config value is missing', () => {
       EnvConfigValidator.validateEnvironment({
         ALGOLIA_API_KEY: 'algolia-api-key',
-        ALGOLIA_APP_ID: 'algolia-app-id',
+        ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id'
       });
@@ -58,7 +58,7 @@ describe('env-config-validator', () => {
     it('should exit the process if a required config value is empty', () => {
       EnvConfigValidator.validateEnvironment({
         ALGOLIA_API_KEY: 'algolia-api-key',
-        ALGOLIA_APP_ID: 'algolia-app-id',
+        ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: ''

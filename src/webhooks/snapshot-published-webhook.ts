@@ -1,6 +1,7 @@
 import * as algoliasearch from 'algoliasearch';
 import { validate } from 'class-validator';
 import { ContentItem, DynamicContent } from 'dc-management-sdk-js';
+import { DynamicContentConfig } from 'dc-management-sdk-js/build/main/lib/DynamicContent';
 import * as debug from 'debug';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
 
@@ -10,7 +11,8 @@ export class SnapshotPublishedWebhookRequest {
   constructor(
     public readonly dynamicContent: { clientId: string; clientSecret: string },
     public readonly algolia: { apiKey: string; indexName: string; applicationId: string },
-    public readonly webhook: WebhookRequest
+    public readonly webhook: WebhookRequest,
+    public readonly dcConfig?: DynamicContentConfig
   ) {}
 }
 
@@ -44,10 +46,11 @@ export class SnapshotPublishedWebhook {
 
     log('Received webhook: %j', request.webhook);
 
-    const dynamicContent = new DynamicContent({
+    const clientCredentials = {
       client_id: request.dynamicContent.clientId,
       client_secret: request.dynamicContent.clientSecret
-    });
+    };
+    const dynamicContent = new DynamicContent(clientCredentials, request.dcConfig);
 
     let contentItem: ContentItem;
     try {

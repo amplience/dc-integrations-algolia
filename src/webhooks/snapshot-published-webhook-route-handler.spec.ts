@@ -2,16 +2,16 @@ import * as express from 'express';
 import * as mocks from 'node-mocks-http';
 import { Snapshot } from '../dynamic-content/models/snapshot';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
+import { AlgoliaSearchRequestError } from '../errors/algolia-search-request-error';
+import { DynamicContentRequestError } from '../errors/dynamic-content-request-error';
+import { InvalidWebhookRequestError } from '../errors/invalid-webhook-request-error';
+import { UnsupportedWebhookError } from '../errors/unsupported-webhook-error';
 import {
   SnapshotPublishedWebhook,
   SnapshotPublishedWebhookPresenter,
   SnapshotPublishedWebhookRequest
 } from './snapshot-published-webhook';
 import { snapshotPublishedWebhookRouteHandler } from './snapshot-published-webhook-route-handler';
-import { InvalidWebhookRequestError } from '../errors/invalid-webhook-request-error';
-import { UnsupportedWebhookError } from '../errors/unsupported-webhook-error';
-import { DynamicContentRequestError } from '../errors/dynamic-content-request-error';
-import { AlgoliaSearchRequestError } from '../errors/algolia-search-request-error';
 
 const mockProcessWebhook = jest.fn();
 jest.mock('./snapshot-published-webhook', () => {
@@ -49,7 +49,11 @@ describe('SnapshotPublishedRouteHandler', () => {
           indexName: process.env.ALGOLIA_INDEX_NAME,
           applicationId: process.env.ALGOLIA_APPLICATION_ID
         },
-        webhookRequest
+        webhookRequest,
+        {
+          apiUrl: undefined,
+          authUrl: undefined
+        }
       ),
       {}
     );
