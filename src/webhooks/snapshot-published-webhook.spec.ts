@@ -27,6 +27,11 @@ jest.mock('algoliasearch', () => {
 describe('SnapshotPublishedWebhook spec', () => {
   const DC_CLIENT_ID = 'DC_CLIENT_ID';
   const DC_CLIENT_SECRET = 'DC_CLIENT_SECRET';
+  const CONTENT_TYPE_WHITELIST = [
+    'http://deliver.bigcontent.io/schema/my-schema-type.json',
+    'http://deliver.bigcontent.io/schema/nested/nested-type.json',
+    'http://deliver.bigcontent.io/schema/my-other-schema-type.json'
+  ];
 
   const ALGOLIA_API_KEY = 'ALGOLIA_API_KEY';
   const ALGOLIA_APPLICATION_ID = 'ALGOLIA_APPLICATION_ID';
@@ -35,6 +40,7 @@ describe('SnapshotPublishedWebhook spec', () => {
   const UNSUPPORTED_WEBHOOK_ERROR = 'unsupportedWebhookError';
   const INVALID_WEBHOOK_REQUEST_ERROR = 'invalidWebhookRequestError';
   const DYNAMIC_CONTENT_REQUEST_ERROR = 'dynamicContentRequestError';
+  const NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR = 'noMatchingContentTypeSchemaError';
   const ALGOLIA_SEARCH_REQUEST_ERROR = 'algoliaSearchRequestError';
   const SUCCESSFUL_RESPONSE = 'successful';
 
@@ -51,6 +57,10 @@ describe('SnapshotPublishedWebhook spec', () => {
       return DYNAMIC_CONTENT_REQUEST_ERROR;
     }
 
+    public noMatchingContentTypeSchemaError(schema: string, contentTypeWhitelist: string[]): string {
+      return NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR;
+    }
+
     public algoliaSearchRequestError(): string {
       return ALGOLIA_SEARCH_REQUEST_ERROR;
     }
@@ -63,12 +73,14 @@ describe('SnapshotPublishedWebhook spec', () => {
   let unsupportedWebhookErrorSpy;
   let invalidWebhookRequestError;
   let dynamicContentRequestError;
+  let noMatchingContentTypeSchemaError;
   let algoliaSearchRequestError;
   let successfulResponse;
   beforeEach(() => {
     unsupportedWebhookErrorSpy = jest.spyOn(fakePresenter, 'unsupportedWebhookError');
     invalidWebhookRequestError = jest.spyOn(fakePresenter, 'invalidWebhookRequestError');
     dynamicContentRequestError = jest.spyOn(fakePresenter, 'dynamicContentRequestError');
+    noMatchingContentTypeSchemaError = jest.spyOn(fakePresenter, 'noMatchingContentTypeSchemaError');
     algoliaSearchRequestError = jest.spyOn(fakePresenter, 'algoliaSearchRequestError');
     successfulResponse = jest.spyOn(fakePresenter, 'successful');
   });
@@ -78,7 +90,8 @@ describe('SnapshotPublishedWebhook spec', () => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
-          clientSecret: DC_CLIENT_SECRET
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -87,7 +100,7 @@ describe('SnapshotPublishedWebhook spec', () => {
         },
         new WebhookRequest({
           name: 'unsupported',
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
         })
       );
       const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
@@ -100,7 +113,8 @@ describe('SnapshotPublishedWebhook spec', () => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
-          clientSecret: DC_CLIENT_SECRET
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -108,7 +122,7 @@ describe('SnapshotPublishedWebhook spec', () => {
           indexName: ALGOLIA_INDEX_NAME
         },
         new WebhookRequest({
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
         })
       );
       const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
@@ -121,7 +135,8 @@ describe('SnapshotPublishedWebhook spec', () => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
-          clientSecret: DC_CLIENT_SECRET
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -176,7 +191,8 @@ describe('SnapshotPublishedWebhook spec', () => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
-          clientSecret: DC_CLIENT_SECRET
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -185,7 +201,10 @@ describe('SnapshotPublishedWebhook spec', () => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+          payload: new Snapshot({
+            id: 'snapshot-id',
+            rootContentItem: { id: 'content-item-id', body: contentItem.body }
+          })
         })
       );
 
@@ -234,7 +253,8 @@ describe('SnapshotPublishedWebhook spec', () => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
-          clientSecret: DC_CLIENT_SECRET
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -243,7 +263,7 @@ describe('SnapshotPublishedWebhook spec', () => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
         })
       );
 
@@ -260,6 +280,72 @@ describe('SnapshotPublishedWebhook spec', () => {
 
       expect(dynamicContentRequestError).toHaveBeenCalled();
       expect(response).toEqual(DYNAMIC_CONTENT_REQUEST_ERROR);
+    });
+    it('Throws an exception when the content type schema id cannot be matched', async () => {
+      const mockGetContentItems = jest.fn();
+      mockDynamicContent.mockImplementation(() => {
+        return {
+          contentItems: {
+            get: mockGetContentItems
+          }
+        };
+      });
+
+      const contentItem = new ContentItem({
+        id: 'content-item-id',
+        body: {
+          _meta: {
+            name: 'main-banner',
+            schema: 'http://deliver.bigcontent.io/schema/fake-schema.json'
+          },
+          heading: 'Buy more stuff!!',
+          link: 'http://anyafinn.com/buymore?campaign=shouting'
+        }
+      });
+      mockGetContentItems.mockResolvedValueOnce(contentItem);
+
+      const mockAddObject = jest.fn();
+
+      const mockInitIndex = jest.fn().mockReturnValue({
+        addObject: mockAddObject
+      });
+      mockAlgoliasearch.mockReturnValue({
+        initIndex: mockInitIndex
+      });
+
+      const request = new SnapshotPublishedWebhookRequest(
+        {
+          clientId: DC_CLIENT_ID,
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
+        },
+        {
+          apiKey: ALGOLIA_API_KEY,
+          applicationId: ALGOLIA_APPLICATION_ID,
+          indexName: ALGOLIA_INDEX_NAME
+        },
+        new WebhookRequest({
+          name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
+          payload: new Snapshot({
+            id: 'snapshot-id',
+            rootContentItem: { id: 'content-item-id', body: contentItem.body }
+          })
+        })
+      );
+
+      const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
+
+      expect(mockDynamicContent).toHaveBeenCalledWith(
+        {
+          client_id: DC_CLIENT_ID,
+          client_secret: DC_CLIENT_SECRET
+        },
+        undefined
+      );
+      expect(mockGetContentItems).toHaveBeenCalled();
+
+      expect(noMatchingContentTypeSchemaError).toHaveBeenCalled();
+      expect(response).toEqual(NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR);
     });
   });
 
@@ -300,7 +386,8 @@ describe('SnapshotPublishedWebhook spec', () => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
-          clientSecret: DC_CLIENT_SECRET
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -309,7 +396,10 @@ describe('SnapshotPublishedWebhook spec', () => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+          payload: new Snapshot({
+            id: 'snapshot-id',
+            rootContentItem: { id: 'content-item-id', body: contentItem.body }
+          })
         })
       );
 

@@ -1,12 +1,10 @@
-import * as debug from 'debug';
 import * as algoliasearch from 'algoliasearch';
+import * as debug from 'debug';
 
 const log = debug('dc-integrations-algolia:algolia-credentials-validator');
 
 export class AlgoliaCredentialsValidator {
-  public static async validateCredentials (
-    algoliaCredentials: { applicationId: string, apiKey: string }
-  ) {
+  public static async validateCredentials(algoliaCredentials: { applicationId: string; apiKey: string }) {
     try {
       const algoliaClient = algoliasearch(algoliaCredentials.applicationId, algoliaCredentials.apiKey);
       const algoliaIndexes = await algoliaClient.listIndexes();

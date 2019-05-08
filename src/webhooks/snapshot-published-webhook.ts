@@ -9,7 +9,7 @@ const log = debug('dc-integrations-algolia:webhook');
 
 export class SnapshotPublishedWebhookRequest {
   constructor(
-    public readonly dynamicContent: { clientId: string; clientSecret: string },
+    public readonly dynamicContent: { clientId: string; clientSecret: string; contentTypeWhitelist: string[] },
     public readonly algolia: { apiKey: string; indexName: string; applicationId: string },
     public readonly webhook: WebhookRequest,
     public readonly dcConfig?: DynamicContentConfig
@@ -22,6 +22,8 @@ export interface SnapshotPublishedWebhookPresenter<T> {
   unsupportedWebhookError(webhook: WebhookRequest): T;
 
   dynamicContentRequestError(error: Error): T;
+
+  noMatchingContentTypeSchemaError(schema: string, contentTypeWhitelist: string[]): T;
 
   algoliaSearchRequestError(error: Error): T;
 
@@ -59,6 +61,18 @@ export class SnapshotPublishedWebhook {
       return presenter.dynamicContentRequestError(err);
     }
 
+    if (
+      !SnapshotPublishedWebhook.isContentTypeSchemaInWhitelist(
+        contentItem.body._meta.schema,
+        request.dynamicContent.contentTypeWhitelist
+      )
+    ) {
+      return presenter.noMatchingContentTypeSchemaError(
+        contentItem.body._meta.schema,
+        request.dynamicContent.contentTypeWhitelist
+      );
+    }
+
     try {
       const algoliaClient = algoliasearch(request.algolia.applicationId, request.algolia.apiKey);
       const index = algoliaClient.initIndex(request.algolia.indexName);
@@ -68,5 +82,9 @@ export class SnapshotPublishedWebhook {
     }
 
     return presenter.successful();
+  }
+
+  public static isContentTypeSchemaInWhitelist(schema: string, contentTypeWhitelist: string[]): boolean {
+    return contentTypeWhitelist.some(schemaId => schema === schemaId);
   }
 }

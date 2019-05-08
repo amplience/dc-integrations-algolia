@@ -2,12 +2,12 @@ import * as debug from 'debug';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import 'reflect-metadata';
+import { AlgoliaCredentialsValidator } from './common/config-validation/algolia-credentials-validator';
 import { DcCredentialsValidator } from './common/config-validation/dc-credentials-validator';
 import { EnvConfigValidator } from './common/config-validation/env-config-validator';
 import { DefaultErrorHandler } from './middleware/default-error-handler';
 import { ValidateWebhookSignature } from './middleware/validate-webhook-signature';
 import { snapshotPublishedWebhookRouteHandler } from './webhooks/snapshot-published-webhook-route-handler';
-import { AlgoliaCredentialsValidator } from './common/config-validation/algolia-credentials-validator';
 
 dotenv.config();
 
@@ -28,9 +28,10 @@ const log = debug('dc-integrations-algolia:app');
     { authUrl: DC_AUTH_URL, apiUrl: DC_API_URL }
   );
 
-  await AlgoliaCredentialsValidator.validateCredentials(
-    { apiKey: process.env.ALGOLIA_API_KEY, applicationId: process.env.ALGOLIA_APPLICATION_ID}
-  );
+  await AlgoliaCredentialsValidator.validateCredentials({
+    apiKey: process.env.ALGOLIA_API_KEY,
+    applicationId: process.env.ALGOLIA_APPLICATION_ID
+  });
 
   log('Credentials validated');
 

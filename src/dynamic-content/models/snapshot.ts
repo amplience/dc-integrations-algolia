@@ -1,9 +1,12 @@
 import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 
-class SnapshotRootContentItem {
+export class SnapshotRootContentItem {
   @IsString()
   @IsNotEmpty()
   public id: string;
+
+  @IsNotEmpty()
+  public body: any;
 }
 
 export class Snapshot {

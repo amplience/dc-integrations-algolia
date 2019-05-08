@@ -15,7 +15,8 @@ export class EnvConfigValidator {
         ALGOLIA_APPLICATION_ID: Joi.string().required(),
         ALGOLIA_INDEX_NAME: Joi.string().required(),
         DC_CLIENT_ID: Joi.string().required(),
-        DC_CLIENT_SECRET: Joi.string().required()
+        DC_CLIENT_SECRET: Joi.string().required(),
+        CONTENT_TYPE_WHITE_LIST: Joi.string().required()
       })
       .unknown();
     const result = Joi.validate(envConfig, envSchema);
