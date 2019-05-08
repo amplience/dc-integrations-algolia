@@ -7,7 +7,7 @@ export class DcCredentialsValidator {
   public static async validateCredentials(
     dcCredentials: { clientId: string; clientSecret: string },
     dcConfig: { authUrl: string; apiUrl: string }
-  ) {
+  ): Promise<void> {
     try {
       const dcClient = new DynamicContent(
         { client_id: dcCredentials.clientId, client_secret: dcCredentials.clientSecret },

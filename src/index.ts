@@ -21,7 +21,7 @@ const DC_API_URL: string = process.env.DC_API_URL;
 
 const log = debug('dc-integrations-algolia:app');
 
-(async () => {
+(async (): Promise<void> => {
   log('Validating credentials');
   await DcCredentialsValidator.validateCredentials(
     { clientId: DC_CLIENT_ID, clientSecret: DC_CLIENT_SECRET },
@@ -47,7 +47,9 @@ const log = debug('dc-integrations-algolia:app');
 
   app.use('/', router);
   app.use(DefaultErrorHandler.handleError);
-  app.listen(PORT, () => log(`Listening on port ${PORT}!`));
-})().catch(err => {
-  log('Unexpected error whilst setting up app', err);
-});
+  app.listen(PORT, (): void => log(`Listening on port ${PORT}!`));
+})().catch(
+  (err): void => {
+    log('Unexpected error whilst setting up app', err);
+  }
+);

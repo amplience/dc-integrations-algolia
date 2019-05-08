@@ -13,7 +13,7 @@ export class Snapshot {
 
   @ValidateNested()
   public rootContentItem: SnapshotRootContentItem;
-  constructor(data: { id: string; rootContentItem: SnapshotRootContentItem }) {
+  public constructor(data: { id: string; rootContentItem: SnapshotRootContentItem }) {
     Object.assign(this, data);
   }
 }

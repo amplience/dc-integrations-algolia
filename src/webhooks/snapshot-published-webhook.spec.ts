@@ -8,23 +8,32 @@ import {
 } from './snapshot-published-webhook';
 
 const mockDynamicContent = jest.fn();
-jest.mock('dc-management-sdk-js', () => {
-  return {
-    ...jest.requireActual('dc-management-sdk-js'),
-    DynamicContent: function DynamicContent() {
-      return mockDynamicContent.apply(null, arguments);
-    }
-  };
-});
+jest.mock(
+  'dc-management-sdk-js',
+  (): Function => {
+    return {
+      ...jest.requireActual('dc-management-sdk-js'),
+      DynamicContent: function DynamicContent(): Function {
+        return mockDynamicContent.apply(null, arguments);
+      }
+    };
+  }
+);
 
 const mockAlgoliasearch = jest.fn();
-jest.mock('algoliasearch', () => {
-  return function() {
-    return mockAlgoliasearch.apply(null, arguments);
-  };
-});
+jest.mock(
+  'algoliasearch',
+  (): Function => {
+    return function(): Function {
+      return mockAlgoliasearch.apply(null, arguments);
+    };
+  }
+);
 
-describe('SnapshotPublishedWebhook spec', () => {
+interface MockContentItemsGet {
+  contentItems: { get: Function };
+}
+describe('SnapshotPublishedWebhook spec', (): void => {
   const DC_CLIENT_ID = 'DC_CLIENT_ID';
   const DC_CLIENT_SECRET = 'DC_CLIENT_SECRET';
   const CONTENT_TYPE_WHITELIST = [
@@ -45,11 +54,11 @@ describe('SnapshotPublishedWebhook spec', () => {
   const SUCCESSFUL_RESPONSE = 'successful';
 
   const fakePresenter = new (class implements SnapshotPublishedWebhookPresenter<string> {
-    public invalidWebhookRequestError(webhook: WebhookRequest): string {
+    public invalidWebhookRequestError(): string {
       return INVALID_WEBHOOK_REQUEST_ERROR;
     }
 
-    public unsupportedWebhookError(webhook: WebhookRequest): string {
+    public unsupportedWebhookError(): string {
       return UNSUPPORTED_WEBHOOK_ERROR;
     }
 
@@ -57,7 +66,7 @@ describe('SnapshotPublishedWebhook spec', () => {
       return DYNAMIC_CONTENT_REQUEST_ERROR;
     }
 
-    public noMatchingContentTypeSchemaError(schema: string, contentTypeWhitelist: string[]): string {
+    public noMatchingContentTypeSchemaError(): string {
       return NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR;
     }
 
@@ -76,17 +85,19 @@ describe('SnapshotPublishedWebhook spec', () => {
   let noMatchingContentTypeSchemaError;
   let algoliaSearchRequestError;
   let successfulResponse;
-  beforeEach(() => {
-    unsupportedWebhookErrorSpy = jest.spyOn(fakePresenter, 'unsupportedWebhookError');
-    invalidWebhookRequestError = jest.spyOn(fakePresenter, 'invalidWebhookRequestError');
-    dynamicContentRequestError = jest.spyOn(fakePresenter, 'dynamicContentRequestError');
-    noMatchingContentTypeSchemaError = jest.spyOn(fakePresenter, 'noMatchingContentTypeSchemaError');
-    algoliaSearchRequestError = jest.spyOn(fakePresenter, 'algoliaSearchRequestError');
-    successfulResponse = jest.spyOn(fakePresenter, 'successful');
-  });
+  beforeEach(
+    (): void => {
+      unsupportedWebhookErrorSpy = jest.spyOn(fakePresenter, 'unsupportedWebhookError');
+      invalidWebhookRequestError = jest.spyOn(fakePresenter, 'invalidWebhookRequestError');
+      dynamicContentRequestError = jest.spyOn(fakePresenter, 'dynamicContentRequestError');
+      noMatchingContentTypeSchemaError = jest.spyOn(fakePresenter, 'noMatchingContentTypeSchemaError');
+      algoliaSearchRequestError = jest.spyOn(fakePresenter, 'algoliaSearchRequestError');
+      successfulResponse = jest.spyOn(fakePresenter, 'successful');
+    }
+  );
 
-  describe('invalid webhook requests', () => {
-    it('should throw an exception for unsupported webhook events', async () => {
+  describe('invalid webhook requests', (): void => {
+    it('should throw an exception for unsupported webhook events', async (): Promise<void> => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
@@ -109,7 +120,7 @@ describe('SnapshotPublishedWebhook spec', () => {
       expect(unsupportedWebhookErrorSpy).toHaveBeenCalled();
     });
 
-    it('should throw an exception for missing webhook name', async () => {
+    it('should throw an exception for missing webhook name', async (): Promise<void> => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
@@ -131,7 +142,7 @@ describe('SnapshotPublishedWebhook spec', () => {
       expect(invalidWebhookRequestError).toHaveBeenCalled();
     });
 
-    it('should throw an exception for missing webhook payload', async () => {
+    it('should throw an exception for missing webhook payload', async (): Promise<void> => {
       const request = new SnapshotPublishedWebhookRequest(
         {
           clientId: DC_CLIENT_ID,
@@ -155,16 +166,18 @@ describe('SnapshotPublishedWebhook spec', () => {
     });
   });
 
-  describe('valid webhook', () => {
-    it('should add the DC Snapshots root ContentItem to the Aloglia index', async () => {
+  describe('valid webhook', (): void => {
+    it('should add the DC Snapshots root ContentItem to the Aloglia index', async (): Promise<void> => {
       const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(() => {
-        return {
-          contentItems: {
-            get: mockGetContentItems
-          }
-        };
-      });
+      mockDynamicContent.mockImplementation(
+        (): MockContentItemsGet => {
+          return {
+            contentItems: {
+              get: mockGetContentItems
+            }
+          };
+        }
+      );
 
       const contentItem = new ContentItem({
         id: 'content-item-id',
@@ -228,16 +241,18 @@ describe('SnapshotPublishedWebhook spec', () => {
     });
   });
 
-  describe('Dynamic Content Service failures', () => {
-    it('Throws an exception when the Dynamic Content SDK throws an error', async () => {
+  describe('Dynamic Content Service failures', (): void => {
+    it('Throws an exception when the Dynamic Content SDK throws an error', async (): Promise<void> => {
       const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(() => {
-        return {
-          contentItems: {
-            get: mockGetContentItems
-          }
-        };
-      });
+      mockDynamicContent.mockImplementation(
+        (): MockContentItemsGet => {
+          return {
+            contentItems: {
+              get: mockGetContentItems
+            }
+          };
+        }
+      );
 
       mockGetContentItems.mockRejectedValueOnce(new Error('UNAUTHORIZED'));
 
@@ -281,15 +296,17 @@ describe('SnapshotPublishedWebhook spec', () => {
       expect(dynamicContentRequestError).toHaveBeenCalled();
       expect(response).toEqual(DYNAMIC_CONTENT_REQUEST_ERROR);
     });
-    it('Throws an exception when the content type schema id cannot be matched', async () => {
+    it('Throws an exception when the content type schema id cannot be matched', async (): Promise<void> => {
       const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(() => {
-        return {
-          contentItems: {
-            get: mockGetContentItems
-          }
-        };
-      });
+      mockDynamicContent.mockImplementation(
+        (): MockContentItemsGet => {
+          return {
+            contentItems: {
+              get: mockGetContentItems
+            }
+          };
+        }
+      );
 
       const contentItem = new ContentItem({
         id: 'content-item-id',
@@ -349,16 +366,18 @@ describe('SnapshotPublishedWebhook spec', () => {
     });
   });
 
-  describe('Algolia Service failures', () => {
-    it('Throws an exception when the addObject method throws an error', async () => {
+  describe('Algolia Service failures', (): void => {
+    it('Throws an exception when the addObject method throws an error', async (): Promise<void> => {
       const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(() => {
-        return {
-          contentItems: {
-            get: mockGetContentItems
-          }
-        };
-      });
+      mockDynamicContent.mockImplementation(
+        (): MockContentItemsGet => {
+          return {
+            contentItems: {
+              get: mockGetContentItems
+            }
+          };
+        }
+      );
 
       const contentItem = new ContentItem({
         id: 'content-item-id',

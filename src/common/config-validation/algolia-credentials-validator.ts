@@ -8,7 +8,7 @@ export class AlgoliaCredentialsValidator {
     applicationId: string;
     apiKey: string;
     algoliaIndex: string;
-  }) {
+  }): Promise<void> {
     try {
       const algoliaClient = algoliasearch(algoliaConfiguration.applicationId, algoliaConfiguration.apiKey);
       const algoliaPermissions: { acl: string[]; indexes: string[] } = await algoliaClient.getApiKey(

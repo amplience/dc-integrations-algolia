@@ -5,8 +5,8 @@ import * as express from 'express';
 export default class ValidateWebhookSignature {
   public static middleware(webhooksecret): NextHandleFunction {
     return express.json({
-      type: () => true,
-      verify: (req: express.Request, res: express.Response, buf: Buffer, encoding: string) => {
+      type: (): boolean => true,
+      verify: (req: express.Request, res: express.Response, buf: Buffer): void => {
         const suppliedSignature: string = req.get('X-Amplience-Webhook-Signature');
         const calculatedSignature: string = WebhookSignature.calculate(buf, webhooksecret);
         if (suppliedSignature !== calculatedSignature) {

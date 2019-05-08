@@ -22,7 +22,7 @@ export class EnvConfigValidator {
     const result = Joi.validate(envConfig, envSchema);
 
     if (result.error !== null) {
-      const envErrors = result.error.details.map(detail => detail.message);
+      const envErrors = result.error.details.map((detail): string => detail.message);
       log('Environment configuration error:', ...envErrors);
       process.exit(1);
     }

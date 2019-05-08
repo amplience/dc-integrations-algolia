@@ -9,7 +9,7 @@ export class WebhookRequest {
   @ValidateNested()
   @IsNotEmpty()
   public payload: Snapshot;
-  constructor(data: { name?: string; payload?: Snapshot }) {
+  public constructor(data: { name?: string; payload?: Snapshot }) {
     Object.assign(this, data);
   }
 }

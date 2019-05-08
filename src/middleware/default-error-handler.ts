@@ -1,7 +1,13 @@
 import express = require('express');
+import { HttpError } from '../errors/http-error.interface';
 
 export class DefaultErrorHandler {
-  public static handleError(err: any, req: express.Request, res: express.Response, next: express.NextFunction): void {
+  public static handleError(
+    err: Error & HttpError,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): void {
     if (!err) {
       return next();
     }

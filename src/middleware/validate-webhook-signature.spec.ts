@@ -1,11 +1,14 @@
 const mockCalculate = jest.fn();
-jest.mock('dc-management-sdk-js', () => {
-  return {
-    WebhookSignature: {
-      calculate: mockCalculate
-    }
-  };
-});
+jest.mock(
+  'dc-management-sdk-js',
+  (): { WebhookSignature: { calculate: Function } } => {
+    return {
+      WebhookSignature: {
+        calculate: mockCalculate
+      }
+    };
+  }
+);
 
 import * as mocks from 'node-mocks-http';
 import ValidateWebhookSignature from './validate-webhook-signature';
@@ -21,25 +24,31 @@ describe('ValidateWebhookSignature', (): void => {
     webhooksecret = 'webhook-secret',
     webhookSignatureHeader = 'webhook-signature'
   ): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const body = '{}';
-      const req = mocks.createRequest({
-        headers: {
-          'X-Amplience-Webhook-Signature': webhookSignatureHeader,
-          'Content-Type': 'application/json',
-          'Content-Length': `${body.length}`
-        }
-      });
-      const middleware = ValidateWebhookSignature.middleware(webhooksecret);
-      middleware(req, mocks.createResponse(), (args: Error) => {
-        expect(mockCalculate).toBeCalledWith(new Buffer(body), webhooksecret);
-        if (args) {
-          return reject(args);
-        }
-        return resolve();
-      });
-      req.send(body);
-    });
+    return new Promise<void>(
+      (resolve, reject): void => {
+        const body = '{}';
+        const req = mocks.createRequest({
+          headers: {
+            'X-Amplience-Webhook-Signature': webhookSignatureHeader,
+            'Content-Type': 'application/json',
+            'Content-Length': `${body.length}`
+          }
+        });
+        const middleware = ValidateWebhookSignature.middleware(webhooksecret);
+        middleware(
+          req,
+          mocks.createResponse(),
+          (args: Error): void => {
+            expect(mockCalculate).toBeCalledWith(new Buffer(body), webhooksecret);
+            if (args) {
+              return reject(args);
+            }
+            return resolve();
+          }
+        );
+        req.send(body);
+      }
+    );
   }
 
   test('should not throw an error when WebhookSignature.calculate() matches the X-Amplience-Webhook-Signature header', async (): Promise<

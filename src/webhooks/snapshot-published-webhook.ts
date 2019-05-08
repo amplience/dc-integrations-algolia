@@ -1,6 +1,6 @@
 import * as algoliasearch from 'algoliasearch';
 import { validate } from 'class-validator';
-import { ContentItem, DynamicContent } from 'dc-management-sdk-js';
+import { ContentItem, DynamicContent, OAuth2ClientCredentials } from 'dc-management-sdk-js';
 import { DynamicContentConfig } from 'dc-management-sdk-js/build/main/lib/DynamicContent';
 import * as debug from 'debug';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
@@ -8,7 +8,7 @@ import { WebhookRequest } from '../dynamic-content/models/webhook-request';
 const log = debug('dc-integrations-algolia:webhook');
 
 export class SnapshotPublishedWebhookRequest {
-  constructor(
+  public constructor(
     public readonly dynamicContent: { clientId: string; clientSecret: string; contentTypeWhitelist: string[] },
     public readonly algolia: { apiKey: string; indexName: string; applicationId: string },
     public readonly webhook: WebhookRequest,
@@ -48,7 +48,7 @@ export class SnapshotPublishedWebhook {
 
     log('Received webhook: %j', request.webhook);
 
-    const clientCredentials = {
+    const clientCredentials: OAuth2ClientCredentials = {
       client_id: request.dynamicContent.clientId,
       client_secret: request.dynamicContent.clientSecret
     };
@@ -85,6 +85,6 @@ export class SnapshotPublishedWebhook {
   }
 
   public static isContentTypeSchemaInWhitelist(schema: string, contentTypeWhitelist: string[]): boolean {
-    return contentTypeWhitelist.some(schemaId => schema === schemaId);
+    return contentTypeWhitelist.some((schemaId): boolean => schema === schemaId);
   }
 }

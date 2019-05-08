@@ -14,31 +14,36 @@ import {
 import { snapshotPublishedWebhookRouteHandler } from './snapshot-published-webhook-route-handler';
 
 const mockProcessWebhook = jest.fn();
-jest.mock('./snapshot-published-webhook', () => {
-  return {
-    ...jest.requireActual('./snapshot-published-webhook'),
-    SnapshotPublishedWebhook: {
-      processWebhook() {
-        return mockProcessWebhook.apply(undefined, arguments);
+jest.mock(
+  './snapshot-published-webhook',
+  (): { [key: string]: Function } => {
+    return {
+      ...jest.requireActual('./snapshot-published-webhook'),
+      SnapshotPublishedWebhook: {
+        processWebhook(): Function {
+          return mockProcessWebhook.apply(undefined, arguments);
+        }
       }
-    }
-  };
-});
-
-describe('SnapshotPublishedRouteHandler', () => {
-  beforeAll(() => {
-    // set up environment variables
-    process.env = {
-      ALGOLIA_API_KEY: 'algolia-api-key',
-      ALGOLIA_APPLICATION_ID: 'algolia-app-id',
-      ALGOLIA_INDEX_NAME: 'algolia-index-name',
-      DC_CLIENT_ID: 'dc-client-id',
-      DC_CLIENT_SECRET: 'dc-secret',
-      CONTENT_TYPE_WHITE_LIST: 'schema-id1;schema-id2;schema-id3'
     };
-  });
+  }
+);
 
-  function assertProcessWebhookParams(webhookRequest) {
+describe('SnapshotPublishedRouteHandler', (): void => {
+  beforeAll(
+    (): void => {
+      // set up environment variables
+      process.env = {
+        ALGOLIA_API_KEY: 'algolia-api-key',
+        ALGOLIA_APPLICATION_ID: 'algolia-app-id',
+        ALGOLIA_INDEX_NAME: 'algolia-index-name',
+        DC_CLIENT_ID: 'dc-client-id',
+        DC_CLIENT_SECRET: 'dc-secret',
+        CONTENT_TYPE_WHITE_LIST: 'schema-id1;schema-id2;schema-id3'
+      };
+    }
+  );
+
+  function assertProcessWebhookParams(webhookRequest): void {
     expect(mockProcessWebhook).toBeCalledWith(
       new SnapshotPublishedWebhookRequest(
         {
@@ -61,10 +66,10 @@ describe('SnapshotPublishedRouteHandler', () => {
     );
   }
 
-  describe('Presenter tests', () => {
-    it('Should call the successful presenter method', async () => {
+  describe('Presenter tests', (): void => {
+    it('Should call the successful presenter method', async (): Promise<void> => {
       mockProcessWebhook.mockImplementationOnce(
-        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>) => presenter.successful()
+        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void => presenter.successful()
       );
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
@@ -83,14 +88,14 @@ describe('SnapshotPublishedRouteHandler', () => {
       expect(res._getStatusCode()).toEqual(202);
     });
 
-    it('Should call the invalidWebhookRequestError presenter method', async done => {
+    it('Should call the invalidWebhookRequestError presenter method', async (done): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
         payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
       });
 
       mockProcessWebhook.mockImplementationOnce(
-        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>) =>
+        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
           presenter.invalidWebhookRequestError(webhookRequest)
       );
 
@@ -110,14 +115,14 @@ describe('SnapshotPublishedRouteHandler', () => {
       }
     });
 
-    it('Should call the unsupportedWebhookError presenter method', async done => {
+    it('Should call the unsupportedWebhookError presenter method', async (done): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
         payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
       });
 
       mockProcessWebhook.mockImplementationOnce(
-        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>) =>
+        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
           presenter.unsupportedWebhookError(webhookRequest)
       );
 
@@ -137,14 +142,14 @@ describe('SnapshotPublishedRouteHandler', () => {
       }
     });
 
-    it('Should call the dynamicContentRequestError presenter method', async done => {
+    it('Should call the dynamicContentRequestError presenter method', async (done): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
         payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
       });
 
       mockProcessWebhook.mockImplementationOnce(
-        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>) =>
+        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
           presenter.dynamicContentRequestError(new Error('UNAUTHORIZED'))
       );
 
@@ -164,14 +169,14 @@ describe('SnapshotPublishedRouteHandler', () => {
       }
     });
 
-    it('Should call the algoliaSearchRequestError presenter method', async done => {
+    it('Should call the algoliaSearchRequestError presenter method', async (done): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
         payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
       });
 
       mockProcessWebhook.mockImplementationOnce(
-        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>) =>
+        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
           presenter.algoliaSearchRequestError(new Error('UNAUTHORIZED'))
       );
 

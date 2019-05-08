@@ -1,25 +1,31 @@
 import * as Joi from '@hapi/joi';
 import { EnvConfigValidator } from './env-config-validator';
 
-describe('env-config-validator', () => {
+describe('env-config-validator', (): void => {
   let processExitSpy;
   let validateSpy;
 
-  beforeEach(() => {
-    validateSpy = jest.spyOn(Joi, 'validate');
-    processExitSpy = jest.spyOn(process, 'exit').mockImplementation();
-  });
+  beforeEach(
+    (): void => {
+      validateSpy = jest.spyOn(Joi, 'validate');
+      processExitSpy = jest.spyOn(process, 'exit').mockImplementation();
+    }
+  );
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+  afterEach(
+    (): void => {
+      jest.restoreAllMocks();
+    }
+  );
 
-  afterAll(() => {
-    jest.resetAllMocks();
-  });
+  afterAll(
+    (): void => {
+      jest.resetAllMocks();
+    }
+  );
 
-  describe('validEnvironment() - success', () => {
-    it('should pass through when all required config values exist', () => {
+  describe('validEnvironment() - success', (): void => {
+    it('should pass through when all required config values exist', (): void => {
       EnvConfigValidator.validateEnvironment({
         ALGOLIA_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
@@ -31,7 +37,7 @@ describe('env-config-validator', () => {
       expect(validateSpy.mock.results[0].value.error).toBe(null);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
-    it('should pass through when all required config values exist and ignore unknown value', () => {
+    it('should pass through when all required config values exist and ignore unknown value', (): void => {
       EnvConfigValidator.validateEnvironment({
         ALGOLIA_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
@@ -45,8 +51,8 @@ describe('env-config-validator', () => {
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
   });
-  describe('validEnvironment() - fail', () => {
-    it('should exit the process if a required config value is missing', () => {
+  describe('validEnvironment() - fail', (): void => {
+    it('should exit the process if a required config value is missing', (): void => {
       EnvConfigValidator.validateEnvironment({
         ALGOLIA_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
@@ -58,7 +64,7 @@ describe('env-config-validator', () => {
       expect(validateSpy.mock.results[0].value.error.details[0].message).toEqual('"DC_CLIENT_SECRET" is required');
       expect(processExitSpy).toHaveBeenCalledWith(1);
     });
-    it('should exit the process if a required config value is empty', () => {
+    it('should exit the process if a required config value is empty', (): void => {
       EnvConfigValidator.validateEnvironment({
         ALGOLIA_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
