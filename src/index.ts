@@ -2,11 +2,11 @@ import * as debug from 'debug';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import 'reflect-metadata';
+import { DcCredentialsValidator } from './common/config-validation/dc-credentials-validator';
 import { EnvConfigValidator } from './common/config-validation/env-config-validator';
 import { DefaultErrorHandler } from './middleware/default-error-handler';
 import { ValidateWebhookSignature } from './middleware/validate-webhook-signature';
 import { snapshotPublishedWebhookRouteHandler } from './webhooks/snapshot-published-webhook-route-handler';
-import { DcCredentialsValidator } from './common/config-validation/dc-credentials-validator';
 
 dotenv.config();
 

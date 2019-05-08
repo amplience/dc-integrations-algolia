@@ -1,23 +1,15 @@
-import * as express from 'express';
 import { plainToClass } from 'class-transformer';
+import * as express from 'express';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
+import { AlgoliaSearchRequestError } from '../errors/algolia-search-request-error';
+import { DynamicContentRequestError } from '../errors/dynamic-content-request-error';
 import { InvalidWebhookRequestError } from '../errors/invalid-webhook-request-error';
 import { UnsupportedWebhookError } from '../errors/unsupported-webhook-error';
-import { DynamicContentRequestError } from '../errors/dynamic-content-request-error';
-import { AlgoliaSearchRequestError } from '../errors/algolia-search-request-error';
-import { SnapshotPublishedWebhookRequest, SnapshotPublishedWebhook } from './snapshot-published-webhook';
-
-export interface SnapshotPublishedWebhookPresenter<T> {
-  invalidWebhookRequestError(webhook: WebhookRequest): T;
-
-  unsupportedWebhookError(webhook: WebhookRequest): T;
-
-  dynamicContentRequestError(error: Error): T;
-
-  algoliaSearchRequestError(error: Error): T;
-
-  successful(): T;
-}
+import {
+  SnapshotPublishedWebhook,
+  SnapshotPublishedWebhookPresenter,
+  SnapshotPublishedWebhookRequest
+} from './snapshot-published-webhook';
 
 export const snapshotPublishedWebhookRouteHandler = (req: express.Request, res: express.Response): Promise<void> => {
   const request = new SnapshotPublishedWebhookRequest(
@@ -34,23 +26,23 @@ export const snapshotPublishedWebhookRouteHandler = (req: express.Request, res: 
   );
 
   const presenter = new (class implements SnapshotPublishedWebhookPresenter<void> {
-    invalidWebhookRequestError(webhook: WebhookRequest): never {
+    public invalidWebhookRequestError(webhook: WebhookRequest): never {
       throw new InvalidWebhookRequestError(webhook);
     }
 
-    unsupportedWebhookError(webhook: WebhookRequest): never {
+    public unsupportedWebhookError(webhook: WebhookRequest): never {
       throw new UnsupportedWebhookError(webhook);
     }
 
-    dynamicContentRequestError(err: Error): never {
+    public dynamicContentRequestError(err: Error): never {
       throw new DynamicContentRequestError(err.message);
     }
 
-    algoliaSearchRequestError(err: Error): never {
+    public algoliaSearchRequestError(err: Error): never {
       throw new AlgoliaSearchRequestError(err.message);
     }
 
-    successful(): void {
+    public successful(): void {
       res.status(202).send('successful');
     }
   })();

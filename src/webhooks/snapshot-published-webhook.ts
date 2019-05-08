@@ -3,9 +3,8 @@ import { validate } from 'class-validator';
 import { ContentItem, DynamicContent } from 'dc-management-sdk-js';
 import * as debug from 'debug';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
-import { SnapshotPublishedWebhookPresenter } from './snapshot-published-webhook-route-handler';
 
-const log = debug('dc-snasphot-published-webhook');
+const log = debug('dc-integrations-algolia:webhook');
 
 export class SnapshotPublishedWebhookRequest {
   constructor(
@@ -13,6 +12,18 @@ export class SnapshotPublishedWebhookRequest {
     public readonly algolia: { apiKey: string; indexName: string; applicationId: string },
     public readonly webhook: WebhookRequest
   ) {}
+}
+
+export interface SnapshotPublishedWebhookPresenter<T> {
+  invalidWebhookRequestError(webhook: WebhookRequest): T;
+
+  unsupportedWebhookError(webhook: WebhookRequest): T;
+
+  dynamicContentRequestError(error: Error): T;
+
+  algoliaSearchRequestError(error: Error): T;
+
+  successful(): T;
 }
 
 export class SnapshotPublishedWebhook {

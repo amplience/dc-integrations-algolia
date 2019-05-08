@@ -1,14 +1,17 @@
 import { ContentItem } from 'dc-management-sdk-js';
 import { Snapshot } from '../dynamic-content/models/snapshot';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
-import { SnapshotPublishedWebhook, SnapshotPublishedWebhookRequest } from './snapshot-published-webhook';
-import { SnapshotPublishedWebhookPresenter } from './snapshot-published-webhook-route-handler';
+import {
+  SnapshotPublishedWebhook,
+  SnapshotPublishedWebhookPresenter,
+  SnapshotPublishedWebhookRequest
+} from './snapshot-published-webhook';
 
 const mockDynamicContent = jest.fn();
 jest.mock('dc-management-sdk-js', () => {
   return {
     ...jest.requireActual('dc-management-sdk-js'),
-    DynamicContent: function() {
+    DynamicContent() {
       return mockDynamicContent.apply(null, arguments);
     }
   };
@@ -36,23 +39,23 @@ describe('SnapshotPublishedWebhook spec', () => {
   const SUCCESSUL_RESPONSE = 'successful';
 
   const fakePresenter = new (class implements SnapshotPublishedWebhookPresenter<string> {
-    invalidWebhookRequestError(webhook: WebhookRequest): string {
+    public invalidWebhookRequestError(webhook: WebhookRequest): string {
       return INVALID_WEBHOOK_REQUEST_ERROR;
     }
 
-    unsupportedWebhookError(webhook: WebhookRequest): string {
+    public unsupportedWebhookError(webhook: WebhookRequest): string {
       return UNSUPPORTED_WEBHOOK_ERROR;
     }
 
-    dynamicContentRequestError(): string {
+    public dynamicContentRequestError(): string {
       return DYNAMIC_CONTENT_REQUEST_ERROR;
     }
 
-    algoliaSearchRequestError(): string {
+    public algoliaSearchRequestError(): string {
       return ALGOLIA_SEARCH_REQUEST_ERROR;
     }
 
-    successful(): string {
+    public successful(): string {
       return SUCCESSUL_RESPONSE;
     }
   })();

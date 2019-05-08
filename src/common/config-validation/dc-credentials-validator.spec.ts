@@ -1,11 +1,11 @@
-import { DcCredentialsValidator } from './dc-credentials-validator';
 import { DynamicContent } from 'dc-management-sdk-js';
+import { DcCredentialsValidator } from './dc-credentials-validator';
 
 const mockDynamicContent = jest.fn();
 jest.mock('dc-management-sdk-js', () => {
   return {
     ...jest.requireActual('dc-management-sdk-js'),
-    DynamicContent: function() {
+    DynamicContent() {
       return mockDynamicContent.apply(null, arguments);
     }
   };

@@ -1,20 +1,20 @@
 import * as express from 'express';
 import * as mocks from 'node-mocks-http';
+import { Snapshot } from '../dynamic-content/models/snapshot';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
 import {
+  SnapshotPublishedWebhook,
   SnapshotPublishedWebhookPresenter,
-  snapshotPublishedWebhookRouteHandler
-} from './snapshot-published-webhook-route-handler';
-import { SnapshotPublishedWebhook, SnapshotPublishedWebhookRequest } from './snapshot-published-webhook';
-import { Snapshot } from '../dynamic-content/models/snapshot';
-import { plainToClass } from 'class-transformer';
+  SnapshotPublishedWebhookRequest
+} from './snapshot-published-webhook';
+import { snapshotPublishedWebhookRouteHandler } from './snapshot-published-webhook-route-handler';
 
 const mockProcessWebhook = jest.fn();
 jest.mock('./snapshot-published-webhook', () => {
   return {
     ...jest.requireActual('./snapshot-published-webhook'),
     SnapshotPublishedWebhook: {
-      processWebhook: function() {
+      processWebhook() {
         return mockProcessWebhook.apply(undefined, arguments);
       }
     }
