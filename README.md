@@ -29,6 +29,18 @@ Checkout this repo and install the dependencies via npm:
 npm install 
 ```
 
+## Running the tests
+The below command will run unit tests for the project and cover:
+* Route handling
+* Credential validation
+* Environment variable validation
+* SDK Error handling
+* Webhook processing
+
+```bash
+npm run test
+```
+
 ## Running in Development mode 
 
 ### 1. Configure your environment
@@ -105,6 +117,10 @@ Publishing a content item should now trigger your Algolia integration to be invo
   express:router router  : /webhook +1ms
   express:router dispatching POST /webhook +0ms
 ```
+
+## Built with
+* [Amplience Dynamic Content SDK](https://www.npmjs.com/package/dc-management-sdk-js) - Used for fetching content from the Amplience Dynamic Content service.
+* [Algolia Search API Client](https://www.npmjs.com/package/algoliasearch) - Used to add content to an Algolia search index.
 
 ## Contributing
 
