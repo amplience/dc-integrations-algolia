@@ -4,7 +4,7 @@
   "description": "DC Integration - Algolia",
   "scripts": {
     "commit": "npx git-cz",
-    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "DEBUG=dc-integrations-algolia:*,express:* ts-node -r tsconfig-paths/register src/index.ts",
     "start:dev": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
     "fix": "run-s fix:*",
