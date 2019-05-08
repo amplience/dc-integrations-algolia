@@ -38,30 +38,29 @@ describe('AlgoliaCredentialsValidator', () => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY
-      , algoliaIndex: ALGOLIA_INDEX_NAME });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(
-        ALGOLIA_APPLICATION_ID,
-        ALGOLIA_API_KEY
-      );
+        apiKey: ALGOLIA_API_KEY,
+        algoliaIndex: ALGOLIA_INDEX_NAME
+      });
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
 
     it('should pass through when valid algolia credentials are provided - permissions are global across all indexes', async () => {
       const mockGetApiKey = jest.fn();
-      mockAlgoliaSearch.mockImplementation( () => {
+      mockAlgoliaSearch.mockImplementation(() => {
         return {
           getApiKey: mockGetApiKey
-        }
+        };
       });
-      mockGetApiKey.mockResolvedValueOnce({ acl: ['addObject', 'browse'] } );
+      mockGetApiKey.mockResolvedValueOnce({ acl: ['addObject', 'browse'] });
 
-      await AlgoliaCredentialsValidator.validateCredentials({ applicationId: ALGOLIA_APPLICATION_ID, apiKey: ALGOLIA_API_KEY, algoliaIndex: ALGOLIA_INDEX_NAME });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(
-        ALGOLIA_APPLICATION_ID,
-        ALGOLIA_API_KEY
-      );
+      await AlgoliaCredentialsValidator.validateCredentials({
+        applicationId: ALGOLIA_APPLICATION_ID,
+        apiKey: ALGOLIA_API_KEY,
+        algoliaIndex: ALGOLIA_INDEX_NAME
+      });
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
@@ -80,8 +79,9 @@ describe('AlgoliaCredentialsValidator', () => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY
-      , algoliaIndex: ALGOLIA_INDEX_NAME});
+        apiKey: ALGOLIA_API_KEY,
+        algoliaIndex: ALGOLIA_INDEX_NAME
+      });
       expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
       expect(mockGetApiKey).toThrowError(errorMessage);
@@ -97,13 +97,14 @@ describe('AlgoliaCredentialsValidator', () => {
         };
       });
       mockGetApiKey.mockImplementation(() => {
-        return { acl: ['browse'], indexes: ['MY_INDEX', 'ANOTHER_INDEX'] }
+        return { acl: ['browse'], indexes: ['MY_INDEX', 'ANOTHER_INDEX'] };
       });
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY
-      , algoliaIndex: ALGOLIA_INDEX_NAME});
+        apiKey: ALGOLIA_API_KEY,
+        algoliaIndex: ALGOLIA_INDEX_NAME
+      });
       expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(1);
@@ -112,20 +113,21 @@ describe('AlgoliaCredentialsValidator', () => {
     it('should exit when api key does not have addObject permission for specified index', async () => {
       const errorMessage = 'Method not allowed with this API key';
       const mockGetApiKey = jest.fn();
-      mockAlgoliaSearch.mockImplementation( () => {
+      mockAlgoliaSearch.mockImplementation(() => {
         return {
           getApiKey: mockGetApiKey
-        }
+        };
       });
       mockGetApiKey.mockImplementation(() => {
-        return { acl: ['addObject', 'browse'], indexes: ['ANOTHER_INDEX'] }
+        return { acl: ['addObject', 'browse'], indexes: ['ANOTHER_INDEX'] };
       });
 
-      await AlgoliaCredentialsValidator.validateCredentials({ applicationId: ALGOLIA_APPLICATION_ID, apiKey: ALGOLIA_API_KEY, algoliaIndex: ALGOLIA_INDEX_NAME});
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(
-        ALGOLIA_APPLICATION_ID,
-        ALGOLIA_API_KEY
-      );
+      await AlgoliaCredentialsValidator.validateCredentials({
+        applicationId: ALGOLIA_APPLICATION_ID,
+        apiKey: ALGOLIA_API_KEY,
+        algoliaIndex: ALGOLIA_INDEX_NAME
+      });
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(1);
     });

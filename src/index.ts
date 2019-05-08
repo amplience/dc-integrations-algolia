@@ -40,10 +40,10 @@ const log = debug('dc-integrations-algolia:app');
   const router = express.Router();
 
   router.post(
-  '/webhook',
-  ValidateWebhookSignature.middleware(process.env.WEBHOOK_SECRET),
-  snapshotPublishedWebhookRouteHandler
-);
+    '/webhook',
+    ValidateWebhookSignature.middleware(process.env.WEBHOOK_SECRET),
+    snapshotPublishedWebhookRouteHandler
+  );
 
   app.use('/', router);
   app.use(DefaultErrorHandler.handleError);
