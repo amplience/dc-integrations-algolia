@@ -12,7 +12,7 @@ import {
   SnapshotPublishedWebhookRequest
 } from './snapshot-published-webhook';
 import { snapshotPublishedWebhookRouteHandler } from './snapshot-published-webhook-route-handler';
-import {NoMatchingContentTypeSchemaError} from "../errors/no-matching-content-type-schema-error";
+import { NoMatchingContentTypeSchemaError } from '../errors/no-matching-content-type-schema-error';
 
 const mockProcessWebhook = jest.fn();
 jest.mock(
