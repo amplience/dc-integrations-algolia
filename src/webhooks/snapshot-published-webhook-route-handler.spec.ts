@@ -72,7 +72,8 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should process a missing or empty whitelist', async (): Promise<void> => {
       process.env.CONTENT_TYPE_WHITELIST = undefined;
       mockProcessWebhook.mockImplementationOnce(
-        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void => presenter.successful()
+        (request: SnapshotPublishedWebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
+          presenter.successfullyAddedToIndex(request.algolia.indexName, { objectID: 'content-item-id' })
       );
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
@@ -93,9 +94,10 @@ describe('SnapshotPublishedRouteHandler', (): void => {
   });
 
   describe('Presenter tests', (): void => {
-    it('Should call the successful presenter method', async (): Promise<void> => {
+    it('Should call the successfullyAddedToIndex presenter method', async (): Promise<void> => {
       mockProcessWebhook.mockImplementationOnce(
-        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void => presenter.successful()
+        (request: SnapshotPublishedWebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
+          presenter.successfullyAddedToIndex(request.algolia.indexName, { objectID: 'content-item-id' })
       );
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
@@ -112,6 +114,10 @@ describe('SnapshotPublishedRouteHandler', (): void => {
 
       assertProcessWebhookParams(webhookRequest);
       expect(res._getStatusCode()).toEqual(202);
+      expect(res._getData()).toEqual({
+        addedObject: { objectID: 'content-item-id' },
+        message: 'Successfully added to index "algolia-index-name"'
+      });
     });
 
     it('Should call the invalidWebhookRequestError presenter method', async (): Promise<void> => {

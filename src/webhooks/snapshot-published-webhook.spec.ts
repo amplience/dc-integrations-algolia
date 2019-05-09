@@ -51,7 +51,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
   const DYNAMIC_CONTENT_REQUEST_ERROR = 'dynamicContentRequestError';
   const NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR = 'noMatchingContentTypeSchemaError';
   const ALGOLIA_SEARCH_REQUEST_ERROR = 'algoliaSearchRequestError';
-  const SUCCESSFUL_RESPONSE = 'successful';
+  const SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE = 'successfullyAddedToIndex';
 
   const fakePresenter = new (class implements SnapshotPublishedWebhookPresenter<string> {
     public invalidWebhookRequestError(): string {
@@ -74,8 +74,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       return ALGOLIA_SEARCH_REQUEST_ERROR;
     }
 
-    public successful(): string {
-      return SUCCESSFUL_RESPONSE;
+    public successfullyAddedToIndex(): string {
+      return SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE;
     }
   })();
 
@@ -84,7 +84,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
   let dynamicContentRequestError;
   let noMatchingContentTypeSchemaError;
   let algoliaSearchRequestError;
-  let successfulResponse;
+  let successfullyAddedToIndexResponse;
   beforeEach(
     (): void => {
       unsupportedWebhookErrorSpy = jest.spyOn(fakePresenter, 'unsupportedWebhookError');
@@ -92,7 +92,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       dynamicContentRequestError = jest.spyOn(fakePresenter, 'dynamicContentRequestError');
       noMatchingContentTypeSchemaError = jest.spyOn(fakePresenter, 'noMatchingContentTypeSchemaError');
       algoliaSearchRequestError = jest.spyOn(fakePresenter, 'algoliaSearchRequestError');
-      successfulResponse = jest.spyOn(fakePresenter, 'successful');
+      successfullyAddedToIndexResponse = jest.spyOn(fakePresenter, 'successfullyAddedToIndex');
     }
   );
 
@@ -234,10 +234,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
 
       expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
-      expect(mockAddObject).toHaveBeenCalledWith({ ...contentItem.body, objectID: contentItem.id });
+      const addedObject = { ...contentItem.body, objectID: contentItem.id };
+      expect(mockAddObject).toHaveBeenCalledWith(addedObject);
 
-      expect(response).toEqual(SUCCESSFUL_RESPONSE);
-      expect(successfulResponse).toHaveBeenCalled();
+      expect(response).toEqual(SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE);
+      expect(successfullyAddedToIndexResponse).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME, addedObject);
     });
   });
 

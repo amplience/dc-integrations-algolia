@@ -7,6 +7,7 @@ import { InvalidWebhookRequestError } from '../errors/invalid-webhook-request-er
 import { NoMatchingContentTypeSchemaError } from '../errors/no-matching-content-type-schema-error';
 import { UnsupportedWebhookError } from '../errors/unsupported-webhook-error';
 import {
+  AlgoliaObject,
   SnapshotPublishedWebhook,
   SnapshotPublishedWebhookPresenter,
   SnapshotPublishedWebhookRequest
@@ -57,8 +58,8 @@ export const snapshotPublishedWebhookRouteHandler = async (
       throw new AlgoliaSearchRequestError(err.message);
     }
 
-    public successful(): void {
-      res.status(202).send('successful');
+    public successfullyAddedToIndex(algoliaIndexName: string, addedObject: AlgoliaObject): void {
+      res.status(202).send({ message: `Successfully added to index "${algoliaIndexName}"`, addedObject: addedObject });
     }
   })();
   try {

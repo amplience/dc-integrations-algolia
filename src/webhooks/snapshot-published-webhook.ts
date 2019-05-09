@@ -16,6 +16,12 @@ export class SnapshotPublishedWebhookRequest {
   ) {}
 }
 
+export interface AlgoliaObject {
+  objectID: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}
+
 export interface SnapshotPublishedWebhookPresenter<T> {
   invalidWebhookRequestError(webhook: WebhookRequest): T;
 
@@ -27,7 +33,7 @@ export interface SnapshotPublishedWebhookPresenter<T> {
 
   algoliaSearchRequestError(error: Error): T;
 
-  successful(): T;
+  successfullyAddedToIndex(algoliaIndexName: string, addedObject: AlgoliaObject): T;
 }
 
 export class SnapshotPublishedWebhook {
@@ -73,15 +79,17 @@ export class SnapshotPublishedWebhook {
       );
     }
 
+    const objectToAddToIndex: AlgoliaObject = { ...contentItem.body, objectID: contentItem.id };
+    const algoliaIndexName = request.algolia.indexName;
     try {
       const algoliaClient = algoliasearch(request.algolia.applicationId, request.algolia.apiKey);
-      const index = algoliaClient.initIndex(request.algolia.indexName);
-      await index.addObject({ ...contentItem.body, objectID: contentItem.id });
+      const index = algoliaClient.initIndex(algoliaIndexName);
+      await index.addObject(objectToAddToIndex);
     } catch (err) {
       return presenter.algoliaSearchRequestError(err);
     }
 
-    return presenter.successful();
+    return presenter.successfullyAddedToIndex(algoliaIndexName, objectToAddToIndex);
   }
 
   public static isContentTypeSchemaInWhitelist(schema: string, contentTypeWhitelist: string[]): boolean {
