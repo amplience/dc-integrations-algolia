@@ -50,7 +50,7 @@ export const snapshotPublishedWebhookRouteHandler = async (
       throw new DynamicContentRequestError(err.message);
     }
 
-    public noMatchingContentTypeSchemaError(schema: string, contentTypeWhitelist: string[]): void {
+    public noMatchingContentTypeSchemaError(schema: string, contentTypeWhitelist: string[]): never {
       throw new NoMatchingContentTypeSchemaError(schema, contentTypeWhitelist);
     }
 
