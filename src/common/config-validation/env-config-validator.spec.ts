@@ -33,7 +33,7 @@ describe('env-config-validator', (): void => {
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: 'dc-secret',
-        CONTENT_TYPE_WHITE_LIST: 'schema-ids'
+        CONTENT_TYPE_WHITELIST: 'schema-ids'
       });
       expect(validateSpy.mock.results[0].value.error).toBe(null);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
@@ -47,7 +47,7 @@ describe('env-config-validator', (): void => {
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: 'dc-secret',
         IGNORE_ME: 'im-not-here',
-        CONTENT_TYPE_WHITE_LIST: 'schema-ids'
+        CONTENT_TYPE_WHITELIST: 'schema-ids'
       });
       expect(validateSpy.mock.results[0].value.error).toBe(null);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
@@ -61,7 +61,7 @@ describe('env-config-validator', (): void => {
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
-        CONTENT_TYPE_WHITE_LIST: 'schema-ids'
+        CONTENT_TYPE_WHITELIST: 'schema-ids'
       });
       expect(validateSpy.mock.results[0].value.error).toBeDefined();
       expect(validateSpy.mock.results[0].value.error.details[0].message).toEqual('"DC_CLIENT_SECRET" is required');
@@ -75,7 +75,7 @@ describe('env-config-validator', (): void => {
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: '',
-        CONTENT_TYPE_WHITE_LIST: 'schema-ids'
+        CONTENT_TYPE_WHITELIST: 'schema-ids'
       });
       expect(validateSpy.mock.results[0].value.error).toBeDefined();
       expect(validateSpy.mock.results[0].value.error.details[0].message).toEqual(

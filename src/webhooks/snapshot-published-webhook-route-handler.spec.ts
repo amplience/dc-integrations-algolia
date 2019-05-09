@@ -12,6 +12,7 @@ import {
   SnapshotPublishedWebhookRequest
 } from './snapshot-published-webhook';
 import { snapshotPublishedWebhookRouteHandler } from './snapshot-published-webhook-route-handler';
+import {NoMatchingContentTypeSchemaError} from "../errors/no-matching-content-type-schema-error";
 
 const mockProcessWebhook = jest.fn();
 jest.mock(
@@ -38,7 +39,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: 'dc-secret',
-        CONTENT_TYPE_WHITE_LIST: 'schema-id1;schema-id2;schema-id3'
+        CONTENT_TYPE_WHITELIST: 'schema-id1;schema-id2;schema-id3'
       };
     }
   );
@@ -49,7 +50,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         {
           clientId: process.env.DC_CLIENT_ID,
           clientSecret: process.env.DC_CLIENT_SECRET,
-          contentTypeWhitelist: process.env.CONTENT_TYPE_WHITE_LIST.split(';')
+          contentTypeWhitelist: process.env.CONTENT_TYPE_WHITELIST.split(';')
         },
         {
           apiKey: process.env.ALGOLIA_API_KEY,
@@ -165,6 +166,33 @@ describe('SnapshotPublishedRouteHandler', (): void => {
           assertProcessWebhookParams(webhookRequest);
           expect(err).toBeInstanceOf(DynamicContentRequestError);
           expect(err.statusCode).toEqual(500);
+        }
+      );
+    });
+
+    it('Should call the noMatchingContentTypeSchemaError presenter method', async (): Promise<void> => {
+      const webhookRequest: WebhookRequest = new WebhookRequest({
+        name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+      });
+
+      mockProcessWebhook.mockImplementationOnce(
+        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
+          presenter.noMatchingContentTypeSchemaError('schema', ['schema-id1', 'schema-id2', 'schema-id3'])
+      );
+
+      const req: express.Request = mocks.createRequest({
+        body: webhookRequest
+      });
+      const res = mocks.createResponse();
+
+      await snapshotPublishedWebhookRouteHandler(
+        req,
+        res,
+        (err): void => {
+          assertProcessWebhookParams(webhookRequest);
+          expect(err).toBeInstanceOf(NoMatchingContentTypeSchemaError);
+          expect(err.statusCode).toEqual(202);
         }
       );
     });

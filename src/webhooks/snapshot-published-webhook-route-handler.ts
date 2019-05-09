@@ -21,7 +21,7 @@ export const snapshotPublishedWebhookRouteHandler = async (
     {
       clientId: process.env.DC_CLIENT_ID,
       clientSecret: process.env.DC_CLIENT_SECRET,
-      contentTypeWhitelist: process.env.CONTENT_TYPE_WHITE_LIST.split(';')
+      contentTypeWhitelist: process.env.CONTENT_TYPE_WHITELIST.split(';')
     },
     {
       apiKey: process.env.ALGOLIA_API_KEY,
