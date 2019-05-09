@@ -9,9 +9,9 @@
 
 This project is a sample webhook integration that demonstrates how you can keep your Algolia Search index up-to-date with published content from Dynamic Content.
 
-The structure of this project follows the [model-view-presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) programming pattern to not only showcase error handling and client responses, but to also make it easier to test individual components.
+The rationale behind the structure of this project is to make components reusable and testable. To achieve this we have implemented a presenter pattern that outlines all the possible error and success responses from each route handler. This makes it easier to trace the response that was surfaced and separates the responses to the client from the business logic.   
 
-Our aim when writing the project in this way was to make components reusable, so that when developers make their own implementation our example would be easy to understand and replicable. 
+An example of our implemented presenter can be found [here](src/webhooks/snapshot-published-webhook-route-handler.ts).
 
 ## _Warning_ 
 
