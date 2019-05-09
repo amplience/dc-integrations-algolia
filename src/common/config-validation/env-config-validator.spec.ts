@@ -27,6 +27,7 @@ describe('env-config-validator', (): void => {
   describe('validEnvironment() - success', (): void => {
     it('should pass through when all required config values exist', (): void => {
       EnvConfigValidator.validateEnvironment({
+        WEBHOOK_SECRET: 'secret',
         ALGOLIA_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
@@ -39,6 +40,7 @@ describe('env-config-validator', (): void => {
     });
     it('should pass through when all required config values exist and ignore unknown value', (): void => {
       EnvConfigValidator.validateEnvironment({
+        WEBHOOK_SECRET: 'secret',
         ALGOLIA_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
@@ -54,6 +56,7 @@ describe('env-config-validator', (): void => {
   describe('validEnvironment() - fail', (): void => {
     it('should exit the process if a required config value is missing', (): void => {
       EnvConfigValidator.validateEnvironment({
+        WEBHOOK_SECRET: 'secret',
         ALGOLIA_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
@@ -66,6 +69,7 @@ describe('env-config-validator', (): void => {
     });
     it('should exit the process if a required config value is empty', (): void => {
       EnvConfigValidator.validateEnvironment({
+        WEBHOOK_SECRET: 'secret',
         ALGOLIA_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-application-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',

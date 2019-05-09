@@ -12,7 +12,11 @@ import {
   SnapshotPublishedWebhookRequest
 } from './snapshot-published-webhook';
 
-export const snapshotPublishedWebhookRouteHandler = (req: express.Request, res: express.Response): Promise<void> => {
+export const snapshotPublishedWebhookRouteHandler = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+): Promise<void> => {
   const request = new SnapshotPublishedWebhookRequest(
     {
       clientId: process.env.DC_CLIENT_ID,
@@ -56,5 +60,9 @@ export const snapshotPublishedWebhookRouteHandler = (req: express.Request, res: 
       res.status(202).send('successful');
     }
   })();
-  return SnapshotPublishedWebhook.processWebhook(request, presenter);
+  try {
+    return await SnapshotPublishedWebhook.processWebhook(request, presenter);
+  } catch (err) {
+    return next(err);
+  }
 };

@@ -11,6 +11,7 @@ export class EnvConfigValidator {
   public static validateEnvironment(envConfig: EnvConfig): void {
     const envSchema = Joi.object()
       .keys({
+        WEBHOOK_SECRET: Joi.string().required(),
         ALGOLIA_API_KEY: Joi.string().required(),
         ALGOLIA_APPLICATION_ID: Joi.string().required(),
         ALGOLIA_INDEX_NAME: Joi.string().required(),

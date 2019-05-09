@@ -82,13 +82,13 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       });
       const res = mocks.createResponse();
 
-      await snapshotPublishedWebhookRouteHandler(req, res);
+      await snapshotPublishedWebhookRouteHandler(req, res, (): void => {});
 
       assertProcessWebhookParams(webhookRequest);
       expect(res._getStatusCode()).toEqual(202);
     });
 
-    it('Should call the invalidWebhookRequestError presenter method', async (done): Promise<void> => {
+    it('Should call the invalidWebhookRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
         payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
@@ -104,18 +104,18 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       });
       const res = mocks.createResponse();
 
-      try {
-        await snapshotPublishedWebhookRouteHandler(req, res);
-        done.fail('Expected an error to be thrown');
-      } catch (err) {
-        assertProcessWebhookParams(webhookRequest);
-        expect(err).toBeInstanceOf(InvalidWebhookRequestError);
-        expect(err.statusCode).toEqual(202);
-        done();
-      }
+      await snapshotPublishedWebhookRouteHandler(
+        req,
+        res,
+        (err): void => {
+          assertProcessWebhookParams(webhookRequest);
+          expect(err).toBeInstanceOf(InvalidWebhookRequestError);
+          expect(err.statusCode).toEqual(202);
+        }
+      );
     });
 
-    it('Should call the unsupportedWebhookError presenter method', async (done): Promise<void> => {
+    it('Should call the unsupportedWebhookError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
         payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
@@ -131,18 +131,18 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       });
       const res = mocks.createResponse();
 
-      try {
-        await snapshotPublishedWebhookRouteHandler(req, res);
-        done.fail('Expected an error to be thrown');
-      } catch (err) {
-        assertProcessWebhookParams(webhookRequest);
-        expect(err).toBeInstanceOf(UnsupportedWebhookError);
-        expect(err.statusCode).toEqual(202);
-        done();
-      }
+      await snapshotPublishedWebhookRouteHandler(
+        req,
+        res,
+        (err): void => {
+          assertProcessWebhookParams(webhookRequest);
+          expect(err).toBeInstanceOf(UnsupportedWebhookError);
+          expect(err.statusCode).toEqual(202);
+        }
+      );
     });
 
-    it('Should call the dynamicContentRequestError presenter method', async (done): Promise<void> => {
+    it('Should call the dynamicContentRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
         payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
@@ -158,18 +158,18 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       });
       const res = mocks.createResponse();
 
-      try {
-        await snapshotPublishedWebhookRouteHandler(req, res);
-        done.fail('Expected an error to be thrown');
-      } catch (err) {
-        assertProcessWebhookParams(webhookRequest);
-        expect(err).toBeInstanceOf(DynamicContentRequestError);
-        expect(err.statusCode).toEqual(500);
-        done();
-      }
+      await snapshotPublishedWebhookRouteHandler(
+        req,
+        res,
+        (err): void => {
+          assertProcessWebhookParams(webhookRequest);
+          expect(err).toBeInstanceOf(DynamicContentRequestError);
+          expect(err.statusCode).toEqual(500);
+        }
+      );
     });
 
-    it('Should call the algoliaSearchRequestError presenter method', async (done): Promise<void> => {
+    it('Should call the algoliaSearchRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
         payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
@@ -185,15 +185,15 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       });
       const res = mocks.createResponse();
 
-      try {
-        await snapshotPublishedWebhookRouteHandler(req, res);
-        done.fail('Expected an error to be thrown');
-      } catch (err) {
-        assertProcessWebhookParams(webhookRequest);
-        expect(err).toBeInstanceOf(AlgoliaSearchRequestError);
-        expect(err.statusCode).toEqual(500);
-        done();
-      }
+      await snapshotPublishedWebhookRouteHandler(
+        req,
+        res,
+        (err): void => {
+          assertProcessWebhookParams(webhookRequest);
+          expect(err).toBeInstanceOf(AlgoliaSearchRequestError);
+          expect(err.statusCode).toEqual(500);
+        }
+      );
     });
   });
 });
