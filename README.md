@@ -9,7 +9,7 @@
 
 This project is a sample webhook integration that demonstrates how you can keep your Algolia Search index up-to-date with published content from Dynamic Content.
 
-The rationale behind the structure of this project is to make components reusable and testable. To achieve this we have implemented a presenter pattern that outlines all the possible error and success responses from each route handler. This makes it easier to trace the response that was surfaced and separates the responses to the client from the business logic.   
+The rationale behind the structure of this project is to make components reusable and testable. To achieve this we have implemented a bespoke presenter/coordinator pattern that outlines all the possible error and success responses from each route handler. This makes it easier to trace the response that was surfaced and separates the responses to the client from the business logic.   
 
 An example of our implemented presenter can be found [here](src/webhooks/snapshot-published-webhook-route-handler.ts).
 
