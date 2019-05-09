@@ -30,8 +30,9 @@ jest.mock(
 );
 
 describe('SnapshotPublishedRouteHandler', (): void => {
-  beforeAll(
+  beforeEach(
     (): void => {
+      jest.resetAllMocks();
       // set up environment variables
       process.env = {
         ALGOLIA_API_KEY: 'algolia-api-key',
@@ -66,6 +67,30 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       {}
     );
   }
+
+  describe('Route handler tests', (): void => {
+    it('Should process a missing or empty whitelist', async (): Promise<void> => {
+      process.env.CONTENT_TYPE_WHITELIST = undefined;
+      mockProcessWebhook.mockImplementationOnce(
+        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void => presenter.successful()
+      );
+
+      const webhookRequest: WebhookRequest = new WebhookRequest({
+        name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+      });
+
+      const req: express.Request = mocks.createRequest({
+        body: webhookRequest
+      });
+      const res = mocks.createResponse();
+
+      await snapshotPublishedWebhookRouteHandler(req, res, (): void => {});
+
+      expect(mockProcessWebhook.mock.calls[0][0].dynamicContent.contentTypeWhitelist).toEqual([]);
+      expect(res._getStatusCode()).toEqual(202);
+    });
+  });
 
   describe('Presenter tests', (): void => {
     it('Should call the successful presenter method', async (): Promise<void> => {

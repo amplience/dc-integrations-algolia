@@ -17,11 +17,12 @@ export const snapshotPublishedWebhookRouteHandler = async (
   res: express.Response,
   next: express.NextFunction
 ): Promise<void> => {
+  const CONTENT_TYPE_WHITELIST = process.env.CONTENT_TYPE_WHITELIST;
   const request = new SnapshotPublishedWebhookRequest(
     {
       clientId: process.env.DC_CLIENT_ID,
       clientSecret: process.env.DC_CLIENT_SECRET,
-      contentTypeWhitelist: process.env.CONTENT_TYPE_WHITELIST.split(';')
+      contentTypeWhitelist: CONTENT_TYPE_WHITELIST ? CONTENT_TYPE_WHITELIST.split(';') : []
     },
     {
       apiKey: process.env.ALGOLIA_API_KEY,

@@ -85,6 +85,6 @@ export class SnapshotPublishedWebhook {
   }
 
   public static isContentTypeSchemaInWhitelist(schema: string, contentTypeWhitelist: string[]): boolean {
-    return contentTypeWhitelist.some((schemaId): boolean => schema === schemaId);
+    return contentTypeWhitelist.length == 0 || contentTypeWhitelist.some((schemaId): boolean => schema === schemaId);
   }
 }
