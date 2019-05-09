@@ -42,6 +42,7 @@ WEBHOOK_SECRET=dc-webhook-secret
 ALGOLIA_APPLICATION_ID=my-app-id
 ALGOLIA_API_KEY=my-api-key
 ALGOLIA_INDEX_NAME=my-index-name
+CONTENT_TYPE_WHITE_LIST=schema-id1;schema-id2;schema-id3
 ```
 
 #### 1.1 Using a different Dynamic Content environment
