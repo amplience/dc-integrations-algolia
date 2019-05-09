@@ -71,6 +71,11 @@
         1,
         "always",
         "lower-case"
+      ],
+      "subject-case": [
+        1,
+        "always",
+        "lower-case"
       ]
     }
   },
