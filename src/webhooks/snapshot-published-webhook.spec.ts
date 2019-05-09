@@ -100,7 +100,7 @@ describe('SnapshotPublishedWebhook spec', () => {
         },
         new WebhookRequest({
           name: 'unsupported',
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
         })
       );
       const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
@@ -122,7 +122,7 @@ describe('SnapshotPublishedWebhook spec', () => {
           indexName: ALGOLIA_INDEX_NAME
         },
         new WebhookRequest({
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
         })
       );
       const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
@@ -203,7 +203,7 @@ describe('SnapshotPublishedWebhook spec', () => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new Snapshot({
             id: 'snapshot-id',
-            rootContentItem: { id: 'content-item-id', body: contentItem.body }
+            rootContentItem: { id: 'content-item-id' }
           })
         })
       );
@@ -263,7 +263,7 @@ describe('SnapshotPublishedWebhook spec', () => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
         })
       );
 
@@ -328,7 +328,7 @@ describe('SnapshotPublishedWebhook spec', () => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new Snapshot({
             id: 'snapshot-id',
-            rootContentItem: { id: 'content-item-id', body: contentItem.body }
+            rootContentItem: { id: 'content-item-id' }
           })
         })
       );
@@ -398,7 +398,7 @@ describe('SnapshotPublishedWebhook spec', () => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new Snapshot({
             id: 'snapshot-id',
-            rootContentItem: { id: 'content-item-id', body: contentItem.body }
+            rootContentItem: { id: 'content-item-id' }
           })
         })
       );

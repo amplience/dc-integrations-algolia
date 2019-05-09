@@ -121,7 +121,6 @@ describe('AlgoliaCredentialsValidator', () => {
       mockGetApiKey.mockImplementation(() => {
         return { acl: ['addObject', 'browse'], indexes: ['ANOTHER_INDEX'] };
       });
-
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
         apiKey: ALGOLIA_API_KEY,

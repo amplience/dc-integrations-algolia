@@ -4,9 +4,6 @@ export class SnapshotRootContentItem {
   @IsString()
   @IsNotEmpty()
   public id: string;
-
-  @IsNotEmpty()
-  public body: any;
 }
 
 export class Snapshot {
