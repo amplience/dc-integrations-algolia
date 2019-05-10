@@ -2,12 +2,19 @@ import { NextHandleFunction } from 'connect';
 import { WebhookSignature } from 'dc-management-sdk-js';
 import * as express from 'express';
 import { BadRequestError } from '../errors/bad-request-error';
+import * as debug from 'debug';
+
+const log = debug('dc-integrations-algolia:validate-webhook-request');
+
+export const AMPLIENCE_WEBHOOK_SIGNATURE_HEADER = 'X-Amplience-Webhook-Signature';
 
 export default class ValidateWebhookRequest {
   public static validateHeaders(req: express.Request, res: express.Response, next: express.NextFunction): void {
     if (req.get('content-type') !== 'application/json') {
+      log('Received a invalid HTTP request - Invalid/missing Content-Type or invalid body');
       return next(new BadRequestError());
     }
+    log('Received a valid HTTP request');
     return next();
   }
 
@@ -15,11 +22,13 @@ export default class ValidateWebhookRequest {
     return express.json({
       type: (): boolean => true,
       verify: (req: express.Request, res: express.Response, buf: Buffer): void => {
-        const suppliedSignature: string = req.get('X-Amplience-Webhook-Signature');
+        const suppliedSignature: string = req.get(AMPLIENCE_WEBHOOK_SIGNATURE_HEADER);
         const calculatedSignature: string = WebhookSignature.calculate(buf, webhooksecret);
         if (suppliedSignature !== calculatedSignature) {
+          log('Invalid webhook signature - Please check the your webhook secret');
           throw new Error('Webhook verification failed.');
         }
+        log('Validated webhook signature');
       }
     });
   }

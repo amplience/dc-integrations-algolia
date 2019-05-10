@@ -1,0 +1,31 @@
+{
+  "sequenceId": 1,
+  "id": "5c11bc1b-62c7-436a-b7d2-00bc3565b308",
+  "name": "dynamic-content.snapshot.published",
+  "requestId": "7b72e3f8-47d9-43b8-9257-f00e2d0d47da",
+  "resource": "5b6ab07e52faff0001267193",
+  "payload": {
+    "id": "5cd3eba6c9e77c000106e28a",
+    "comment": "Publish Manifest for content item text-area-en",
+    "createdDate": "2019-05-09T08:58:14.309Z",
+    "createdBy": "15a10f53-3685-4cf1-95f5-0f1d2fdcb604",
+    "createdFrom": "content-item",
+    "type": "SYSTEM",
+    "meta": [],
+    "taggedEditions": [],
+    "locale": null,
+    "rootContentItem": {
+      "label": "Text area EN",
+      "contentTypeUri": "http://schema-id1.json",
+      "id": "84a68172-bc22-48ad-b64a-4ae808bb13fe"
+    },
+    "_links": {
+      "self": {
+        "href": "https://api.amplience.net/v2/content/snapshots/5cd3eba6c9e77c000106e28a"
+      },
+      "snapshot": {
+        "href": "https://api.amplience.net/v2/content/snapshots/5cd3eba6c9e77c000106e28a"
+      }
+    }
+  }
+}

@@ -1,0 +1,177 @@
+[
+  {
+    "scope": "https://auth.adis.ws:443",
+    "method": "post",
+    "path": "/oauth/token",
+    "body": "grant_type=client_credentials&client_id=dc-client-id&client_secret=dc-secret",
+    "status": 200,
+    "response": {
+      "access_token": "eyJraWQiOiJhbXBsaWVuY2UtdG9rZW4tc2lnbmluZy1rZXkiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhbXBsaWVuY2UuY29tIiwiZXhwIjoxNTU3NDg4OTg4LCJqdGkiOiJMbDRQSG1xZUdUR2Z5dEJVVXVUYl9RIiwiaWF0IjoxNTU3NDg3NzI4LCJzdWIiOiI2MTcxIiwibmJmIjoxNTU3NDg3NjA4LCJzZXNzaW9uRXhwaXJlcyI6MTU1NzQ4NzcyOCwiY29tcGFueSI6NDk3LCJjb21wYW55VVVJRCI6ImQxNzY3OTVmLTcyY2YtNDdhNS1hNmI1LWM1NjE4NzQ3NDk3ZSIsInVzZXIiOjYxNzEsInVzZXJVVUlEIjoiZDc4OTM2MDAtNDc1Yy00NGE2LWExODAtYmRmYWQwOGNhOGMzIiwiZGVmYXVsdEJ1Y2tldCI6ImEzNDFkNzI0LWFkNjgtNDRmOS1iOTg4LWUyZTJjNDFiYzZiNCIsInNob3J0VG9rZW4iOmZhbHNlLCJpc0NsaWVudCI6dHJ1ZSwicGVybWlzc2lvbnMiOiJINHNJQUFBQUFBQUFBSXV1VnNwVHNsSnk5dmNMY2ZVTFVkSlJLbEd5aW9hSXVZWDZPWWQ0K3ZzNStnQ0ZVOEhDbVNrSXRmR2VJYTYrUUpraW9JeFNrS3VqaTFKc3JRNVVTWkJyZ0grd1o0aC9VQ1NhQWpBRUFHbzNVMWwwQUFBQSJ9.cieh132gV7aicAijZorSJCcVnZ3NOwD9OY9uDeizJbeJjteoBPolpq96es_KipMl2I1n5ct9jHtlzhR_8ELc8ime_6UpRIlSnopad1-6QpkufZjP8xigA4lm6sDcpG_KgAR-FaKjM4KrkHVVf5CF6opFulkq3EqCtsH4R0H_NWdZ5XiqIumgSi_biFIAppXI9ClDjnecuD-Yw4vlSO6WSJWwvy9xMWiIPQaw0UFWXymw60yBCm-0QoAhKDJw8n0CwFpDuwitUameyZxVegJnHCdXT4zn9lEwuj6NA7TlulVOuf1ycTTZQJjVW3TBxSdFfM26iySW5GENufnFptG9LA",
+      "session_expires_in": 0,
+      "expires_in": 300
+    },
+    "rawHeaders": [
+      "Access-Control-Allow-Credentials",
+      "true",
+      "Access-Control-Allow-Headers",
+      "origin, content-type, accept, authorization",
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS, HEAD",
+      "Access-Control-Allow-Origin",
+      "*",
+      "Access-Control-Max-Age",
+      "1209600",
+      "Content-Type",
+      "application/json",
+      "Date",
+      "Fri, 10 May 2019 11:28:48 GMT",
+      "Server",
+      "Jetty(9.2.z-SNAPSHOT)",
+      "Content-Length",
+      "1151",
+      "Connection",
+      "Close"
+    ]
+  },
+  {
+    "scope": "https://api.amplience.net:443",
+    "method": "get",
+    "path": "/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe",
+    "body": "",
+    "status": 200,
+    "response": {
+      "id": "84a68172-bc22-48ad-b64a-4ae808bb13fe",
+      "folderId": null,
+      "body": {
+        "_meta": {
+          "name": "text-area-en",
+          "schema": "http://schema-id1.json"
+        },
+        "text1": "Text area EN - 10:18"
+      },
+      "version": 4,
+      "label": "Text area EN",
+      "status": "ACTIVE",
+      "createdBy": "15a10f53-3685-4cf1-95f5-0f1d2fdcb604",
+      "createdDate": "2018-12-10T13:41:50.532Z",
+      "lastModifiedBy": "15a10f53-3685-4cf1-95f5-0f1d2fdcb604",
+      "lastModifiedDate": "2019-05-10T08:48:01.187Z",
+      "lastPublishedVersion": 4,
+      "lastPublishedDate": "2019-05-10T08:47:59.145Z",
+      "deliveryId": "84a68172-bc22-48ad-b64a-4ae808bb13fe",
+      "_links": {
+        "self": {
+          "href": "https://api.amplience.net/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe"
+        },
+        "content-item": {
+          "href": "https://api.amplience.net/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe{?projection}",
+          "templated": true
+        },
+        "planned": {
+          "href": "https://api.amplience.net/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe/planned{?epoch,time}",
+          "templated": true
+        },
+        "content-repository": {
+          "href": "https://api.amplience.net/v2/content/content-repositories/5b715fa3d601800001b26245"
+        },
+        "content-item-version": {
+          "href": "https://api.amplience.net/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe/versions{/version}",
+          "templated": true
+        },
+        "content-item-versions": {
+          "href": "https://api.amplience.net/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe/versions{?page,size,sort}",
+          "templated": true
+        },
+        "content-item-history": {
+          "href": "https://api.amplience.net/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe/history{?page,size,sort}",
+          "templated": true
+        },
+        "localizations": {
+          "href": "https://api.amplience.net/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe/localizations{?page,size,sort}",
+          "templated": true
+        },
+        "localization-jobs": {
+          "href": "https://api.amplience.net/v2/content/localization-jobs/search/findByRootContentItem?id=84a68172-bc22-48ad-b64a-4ae808bb13fe{&page,size,sort}",
+          "templated": true
+        },
+        "edition-slot-associations": {
+          "href": "https://api.amplience.net/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe/edition-slot-associations"
+        },
+        "content-item-with-children": {
+          "href": "https://api.amplience.net/v2/content/content-items/search/findByIdWithChildren?id=84a68172-bc22-48ad-b64a-4ae808bb13fe"
+        }
+      }
+    },
+    "rawHeaders": [
+      "Date",
+      "Fri, 10 May 2019 11:28:48 GMT",
+      "Content-Type",
+      "application/json;charset=utf-8",
+      "Transfer-Encoding",
+      "chunked",
+      "Connection",
+      "close",
+      "X-Content-Type-Options",
+      "nosniff",
+      "X-XSS-Protection",
+      "1; mode=block",
+      "Cache-Control",
+      "no-cache, no-store, max-age=0, must-revalidate",
+      "Pragma",
+      "no-cache",
+      "Expires",
+      "0",
+      "Strict-Transport-Security",
+      "max-age=31536000 ; includeSubDomains",
+      "X-Frame-Options",
+      "DENY",
+      "X-Application-Context",
+      "cms-service:default,release:8080",
+      "Last-Modified",
+      "Fri, 10 May 2019 08:48:01 GMT",
+      "Vary",
+      "Accept-Encoding, User-Agent"
+    ]
+  },
+  {
+    "scope": "https://algolia-app-id.algolia.net:443",
+    "method": "POST",
+    "path": "/1/indexes/algolia-index-name",
+    "body": {
+      "_meta": {
+        "name": "text-area-en",
+        "schema": "http://schema-id1.json"
+      },
+      "text1": "Text area EN - 10:18",
+      "objectID": "84a68172-bc22-48ad-b64a-4ae808bb13fe"
+    },
+    "status": 201,
+    "response": {
+      "createdAt": "2019-05-10T11:28:49.094Z",
+      "taskID": 59767072,
+      "objectID": "84a68172-bc22-48ad-b64a-4ae808bb13fe"
+    },
+    "rawHeaders": [
+      "Server",
+      "nginx",
+      "Date",
+      "Fri, 10 May 2019 11:28:49 GMT",
+      "Content-Type",
+      "application/json; charset=UTF-8",
+      "Content-Length",
+      "108",
+      "Connection",
+      "keep-alive",
+      "Access-Control-Allow-Origin",
+      "*",
+      "Timing-Allow-Origin",
+      "*",
+      "Cache-Control",
+      "no-cache",
+      "X-Content-Type-Options",
+      "nosniff",
+      "Content-Disposition",
+      "inline; filename=a.txt"
+    ]
+  }
+]
