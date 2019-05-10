@@ -60,16 +60,16 @@ describe('ValidateWebhookRequest', (): void => {
       );
     }
 
-    let validateBodySpy;
+    let validateHeadersSpy;
     beforeEach(
       (): void => {
-        validateBodySpy = jest.spyOn(ValidateWebhookRequest, 'validateBody');
+        validateHeadersSpy = jest.spyOn(ValidateWebhookRequest, 'validateHeaders');
       }
     );
 
     afterAll(
       (): void => {
-        validateBodySpy.mockRestore();
+        validateHeadersSpy.mockRestore();
       }
     );
 
@@ -77,7 +77,7 @@ describe('ValidateWebhookRequest', (): void => {
       mockCalculate.mockReturnValue('webhook-signature');
       const error = await invokeMiddleware();
       expect(error).toBeUndefined();
-      expect(validateBodySpy).toBeCalled();
+      expect(validateHeadersSpy).toBeCalled();
       expect(mockCalculate).toBeCalledWith(new Buffer('{}'), 'webhook-secret');
     });
   });
@@ -137,21 +137,21 @@ describe('ValidateWebhookRequest', (): void => {
     });
   });
 
-  describe('validateBody', (): void => {
-    function invokeValidateBodyMiddleware(headers: { [key: string]: string } = {}, body?: string): Promise<string> {
+  describe('validateHeaders', (): void => {
+    function invokeValidateHeadersMiddleware(headers: { [key: string]: string } = {}): Promise<string> {
       return new Promise<string>(
         (resolve, reject): void => {
           const webhookSignatureHeader = 'webhook-signature';
+          const body = '{}';
           const req = mocks.createRequest({
             headers: {
               'X-Amplience-Webhook-Signature': webhookSignatureHeader,
-              'Content-Length': `${body ? body.length : 0}`,
+              'Content-Length': `${body.length}`,
               ...headers
             }
           });
 
-          req.send(body);
-          ValidateWebhookRequest.validateBody(
+          ValidateWebhookRequest.validateHeaders(
             req,
             mocks.createResponse(),
             (args: Error): void => {
@@ -161,6 +161,7 @@ describe('ValidateWebhookRequest', (): void => {
               return resolve();
             }
           );
+          req.send(body);
         }
       );
     }
@@ -169,7 +170,7 @@ describe('ValidateWebhookRequest', (): void => {
       void
     > => {
       try {
-        const error = await invokeValidateBodyMiddleware({ 'Content-Type': 'application/json' }, '{}');
+        const error = await invokeValidateHeadersMiddleware({ 'Content-Type': 'application/json' });
         expect(error).toBeUndefined();
         done();
       } catch (err) {
@@ -179,7 +180,7 @@ describe('ValidateWebhookRequest', (): void => {
 
     test('should throw an error when Content-Type header is not set', async (done): Promise<void> => {
       try {
-        await invokeValidateBodyMiddleware({}, '{}');
+        await invokeValidateHeadersMiddleware({});
         done.fail('Expected an error to be thrown');
       } catch (err) {
         expect(err).toBeInstanceOf(BadRequestError);
@@ -191,7 +192,7 @@ describe('ValidateWebhookRequest', (): void => {
 
     test('should throw an error when Content-Type header is not application/json', async (done): Promise<void> => {
       try {
-        await invokeValidateBodyMiddleware({ 'Content-Type': 'text/html' }, '{}');
+        await invokeValidateHeadersMiddleware({ 'Content-Type': 'text/html' });
         done.fail('Expected an error to be thrown');
       } catch (err) {
         expect(err).toBeInstanceOf(BadRequestError);

@@ -4,8 +4,8 @@ import * as express from 'express';
 import { BadRequestError } from '../errors/bad-request-error';
 
 export default class ValidateWebhookRequest {
-  public static validateBody(req: express.Request, res: express.Response, next: express.NextFunction): void {
-    if (req.get('content-type') !== 'application/json' || !req.body || typeof req.body !== 'object') {
+  public static validateHeaders(req: express.Request, res: express.Response, next: express.NextFunction): void {
+    if (req.get('content-type') !== 'application/json') {
       return next(new BadRequestError());
     }
     return next();
@@ -25,6 +25,6 @@ export default class ValidateWebhookRequest {
   }
 
   public static middleware(webhooksecret: string): NextHandleFunction[] {
-    return [ValidateWebhookRequest.validateBody, ValidateWebhookRequest.expressJson(webhooksecret)];
+    return [ValidateWebhookRequest.validateHeaders, ValidateWebhookRequest.expressJson(webhooksecret)];
   }
 }
