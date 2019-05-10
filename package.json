@@ -13,6 +13,8 @@
     "test": "run-s lint test:jest",
     "test:jest": "jest",
     "test:coverage": "jest --coverage",
+    "test:report": "run-s test:coverage test:report:open",
+    "test:report:open": "npx opn ./coverage/lcov-report/index.html",
     "lint": "prettier --check \"**/*.ts\" && eslint \"**/*.ts\""
   },
   "repository": {
