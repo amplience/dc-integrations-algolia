@@ -6,7 +6,7 @@ import { AlgoliaCredentialsValidator } from './common/config-validation/algolia-
 import { DcCredentialsValidator } from './common/config-validation/dc-credentials-validator';
 import { EnvConfigValidator } from './common/config-validation/env-config-validator';
 import { DefaultErrorHandler } from './middleware/default-error-handler';
-import ValidateWebhookSignature from './middleware/validate-webhook-signature';
+import ValidateWebhookRequest from './middleware/validate-webhook-request';
 import { snapshotPublishedWebhookRouteHandler } from './webhooks/snapshot-published-webhook-route-handler';
 
 dotenv.config();
@@ -41,7 +41,7 @@ const log = debug('dc-integrations-algolia:app');
 
   router.post(
     '/webhook',
-    ValidateWebhookSignature.middleware(process.env.WEBHOOK_SECRET),
+    ValidateWebhookRequest.middleware(process.env.WEBHOOK_SECRET),
     snapshotPublishedWebhookRouteHandler
   );
 
