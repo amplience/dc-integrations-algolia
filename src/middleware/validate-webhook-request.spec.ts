@@ -23,7 +23,7 @@ describe('ValidateWebhookRequest', (): void => {
     }
   );
 
-  describe('middleware', () => {
+  describe('middleware', (): void => {
     function invokeMiddleware(): Promise<void> {
       return new Promise<void>(
         (resolve, reject): void => {
@@ -67,9 +67,11 @@ describe('ValidateWebhookRequest', (): void => {
       }
     );
 
-    afterAll(() => {
-      validateBodySpy.mockRestore();
-    });
+    afterAll(
+      (): void => {
+        validateBodySpy.mockRestore();
+      }
+    );
 
     it('should run all middleware together successfully', async (): Promise<void> => {
       mockCalculate.mockReturnValue('webhook-signature');
