@@ -15,16 +15,30 @@ export class AlgoliaCredentialsValidator {
         algoliaConfiguration.apiKey
       );
 
+      if (!algoliaPermissions.acl.includes('addObject')) {
+        log(`APIKey provided does not have the addObject permission`);
+        process.exit(1);
+      }
+
       if (
-        !algoliaPermissions.acl.includes('addObject') ||
-        (algoliaPermissions.indexes && !algoliaPermissions.indexes.includes(algoliaConfiguration.algoliaIndex))
+        algoliaPermissions.indexes &&
+        !this.matchIndexName(algoliaPermissions.indexes, algoliaConfiguration.algoliaIndex)
       ) {
-        log(`APIKey provided does not have the addObject permission for index ${algoliaConfiguration.algoliaIndex}`);
+        log(`APIKey provided does not have the permission for index ${algoliaConfiguration.algoliaIndex}`);
         process.exit(1);
       }
     } catch (err) {
       log('Invalid Algolia credentials', err);
       process.exit(1);
     }
+  }
+
+  private static matchIndexName(indices: string[], indexName: string): boolean {
+    return indices.some(
+      (index): boolean => {
+        const indexRegex = new RegExp(index.toLowerCase().replace(/^\*|\*$/, '.*'));
+        return indexRegex.test(indexName.toLowerCase());
+      }
+    );
   }
 }
