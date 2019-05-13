@@ -61,22 +61,17 @@ export class SnapshotPublishedWebhook {
     const dynamicContent = new DynamicContent(clientCredentials, request.dcConfig);
 
     let contentItem: ContentItem;
+    const contentItemId = request.webhook.payload.rootContentItem.id;
     try {
-      contentItem = await dynamicContent.contentItems.get(request.webhook.payload.rootContentItem.id);
+      contentItem = await dynamicContent.contentItems.get(contentItemId);
     } catch (err) {
       return presenter.dynamicContentRequestError(err);
     }
 
-    if (
-      !SnapshotPublishedWebhook.isContentTypeSchemaInWhitelist(
-        contentItem.body._meta.schema,
-        request.dynamicContent.contentTypeWhitelist
-      )
-    ) {
-      return presenter.noMatchingContentTypeSchemaError(
-        contentItem.body._meta.schema,
-        request.dynamicContent.contentTypeWhitelist
-      );
+    const contentItemSchema = contentItem.body._meta.schema;
+    const contentTypeWhitelist = request.dynamicContent.contentTypeWhitelist;
+    if (!SnapshotPublishedWebhook.isContentTypeSchemaInWhitelist(contentItemSchema, contentTypeWhitelist)) {
+      return presenter.noMatchingContentTypeSchemaError(contentItemSchema, contentTypeWhitelist);
     }
 
     const objectToAddToIndex: AlgoliaObject = { ...contentItem.body, objectID: contentItem.id };

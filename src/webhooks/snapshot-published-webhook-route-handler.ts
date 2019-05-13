@@ -12,6 +12,11 @@ import {
   SnapshotPublishedWebhookPresenter,
   SnapshotPublishedWebhookRequest
 } from './snapshot-published-webhook';
+import * as debug from 'debug';
+
+const error = debug('dc-integrations-algolia:webhook-error');
+const warning = debug('dc-integrations-algolia:webhook-warning');
+const success = debug('dc-integrations-algolia:webhook-success');
 
 export const snapshotPublishedWebhookRouteHandler = async (
   req: express.Request,
@@ -39,26 +44,36 @@ export const snapshotPublishedWebhookRouteHandler = async (
 
   const presenter = new (class implements SnapshotPublishedWebhookPresenter<void> {
     public invalidWebhookRequestError(webhook: WebhookRequest): never {
+      error('Invalid webhook: %j', webhook);
       throw new InvalidWebhookRequestError(webhook);
     }
 
     public unsupportedWebhookError(webhook: WebhookRequest): never {
+      warning('Unsupported webhook: %j', webhook);
       throw new UnsupportedWebhookError(webhook);
     }
 
     public dynamicContentRequestError(err: Error): never {
+      error('Error occurred wile trying to get DynamicContent ContentItem: %o', err);
       throw new DynamicContentRequestError(err.message);
     }
 
     public noMatchingContentTypeSchemaError(schema: string, contentTypeWhitelist: string[]): never {
+      warning(
+        'Cannot process webhook. ContentItem schema "%s" is not in the whitelist: %o',
+        schema,
+        contentTypeWhitelist
+      );
       throw new NoMatchingContentTypeSchemaError(schema, contentTypeWhitelist);
     }
 
     public algoliaSearchRequestError(err: Error): never {
+      error('Error occurred wile trying to get Algolia: %o', err);
       throw new AlgoliaSearchRequestError(err.message);
     }
 
     public successfullyAddedToIndex(algoliaIndexName: string, addedObject: AlgoliaObject): void {
+      success('Successfully added %j to index "%s"', addedObject, algoliaIndexName);
       res.status(202).send({ message: `Successfully added to index "${algoliaIndexName}"`, addedObject: addedObject });
     }
   })();

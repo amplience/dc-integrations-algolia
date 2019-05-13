@@ -196,7 +196,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         (err): void => {
           assertProcessWebhookParams(webhookRequest);
           expect(err).toBeInstanceOf(DynamicContentRequestError);
-          expect(err.statusCode).toEqual(500);
+          expect(err.statusCode).toEqual(202);
         }
       );
     });
@@ -250,7 +250,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         (err): void => {
           assertProcessWebhookParams(webhookRequest);
           expect(err).toBeInstanceOf(AlgoliaSearchRequestError);
-          expect(err.statusCode).toEqual(500);
+          expect(err.statusCode).toEqual(202);
         }
       );
     });
