@@ -41,7 +41,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
     'http://deliver.bigcontent.io/schema/nested/nested-type.json',
     'http://deliver.bigcontent.io/schema/my-other-schema-type.json'
   ];
-  const CONTENT_TYPE_PROPERTY_WHITELIST = ['_meta', 'label', 'description'];
+  const CONTENT_TYPE_PROPERTY_WHITELIST = ['label', 'description'];
 
   const ALGOLIA_API_KEY = 'ALGOLIA_API_KEY';
   const ALGOLIA_APPLICATION_ID = 'ALGOLIA_APPLICATION_ID';
@@ -282,7 +282,10 @@ describe('SnapshotPublishedWebhook spec', (): void => {
 
       expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
-      const addedObject = { ...contentItem.body, objectID: contentItem.id };
+      const description = contentItem.body.description;
+      const label = contentItem.body.label;
+      const objectID = contentItem.id;
+      const addedObject = { description, label, objectID };
       expect(mockAddObject).toHaveBeenCalledWith(addedObject);
 
       expect(response).toEqual(SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE);
@@ -525,8 +528,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
             name: 'main-banner',
             schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
           },
-          heading: 'Buy more stuff!!',
-          link: 'http://anyafinn.com/buymore?campaign=shouting'
+          description: 'this-is-a-description',
+          label: 'this-is-a-label'
         }
       });
       mockGetContentItems.mockResolvedValueOnce(contentItem);

@@ -13,7 +13,7 @@ import {
 } from './snapshot-published-webhook';
 import { snapshotPublishedWebhookRouteHandler } from './snapshot-published-webhook-route-handler';
 import { NoMatchingContentTypeSchemaError } from '../errors/no-matching-content-type-schema-error';
-import { NoMatchingContentTypePropertyError } from '../errors/no-matching-content-type-property-error';
+import { NoMatchingContentTypePropertiesError } from '../errors/no-matching-content-type-properties-error';
 
 const mockProcessWebhook = jest.fn();
 jest.mock(
@@ -239,7 +239,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
 
       mockProcessWebhook.mockImplementationOnce(
         (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
-          presenter.noMatchingContentTypePropertyError('my-prop', ['prop1', 'prop2', 'prop3'])
+          presenter.noMatchingContentTypePropertiesError(['my-prop'], ['prop1', 'prop2', 'prop3'])
       );
 
       const req: express.Request = mocks.createRequest({
@@ -252,7 +252,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         res,
         (err): void => {
           assertProcessWebhookParams(webhookRequest);
-          expect(err).toBeInstanceOf(NoMatchingContentTypePropertyError);
+          expect(err).toBeInstanceOf(NoMatchingContentTypePropertiesError);
           expect(err.statusCode).toEqual(202);
         }
       );

@@ -93,7 +93,10 @@ export class SnapshotPublishedWebhook {
       );
     }
 
-    const objectToAddToIndex: AlgoliaObject = { ...includedProperties, objectID: contentItem.id };
+    const objectToAddToIndex: AlgoliaObject = {
+      ...includedProperties.reduce((obj, prop): object => ({ ...obj, [prop]: contentItem.body[prop] }), {}),
+      objectID: contentItem.id
+    };
     const algoliaIndexName = request.algolia.indexName;
     try {
       const algoliaClient = algoliasearch(request.algolia.applicationId, request.algolia.apiKey);

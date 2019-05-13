@@ -14,7 +14,8 @@ describe('end-to-end', (): void => {
       ALGOLIA_INDEX_NAME: 'algolia-index-name',
       DC_CLIENT_ID: 'dc-client-id',
       DC_CLIENT_SECRET: 'dc-secret',
-      CONTENT_TYPE_WHITELIST: 'http://schema-id1.json'
+      CONTENT_TYPE_WHITELIST: 'http://schema-id1.json',
+      CONTENT_TYPE_PROPERTY_WHITELIST: '_meta,text1'
     };
 
     const validWebhook = snapshotPublishedWebhook;

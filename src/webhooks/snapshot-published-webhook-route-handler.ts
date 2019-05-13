@@ -17,7 +17,7 @@ import * as debug from 'debug';
 const error = debug('dc-integrations-algolia:webhook-error');
 const warning = debug('dc-integrations-algolia:webhook-warning');
 const success = debug('dc-integrations-algolia:webhook-success');
-import { NoMatchingContentTypePropertyError } from '../errors/no-matching-content-type-property-error';
+import { NoMatchingContentTypePropertiesError } from '../errors/no-matching-content-type-properties-error';
 
 export const snapshotPublishedWebhookRouteHandler = async (
   req: express.Request,
@@ -70,8 +70,8 @@ export const snapshotPublishedWebhookRouteHandler = async (
       throw new NoMatchingContentTypeSchemaError(schema, contentTypeWhitelist);
     }
 
-    public noMatchingContentTypePropertyError(property: string, contentTypePropertyWhitelist: string[]): never {
-      throw new NoMatchingContentTypePropertyError(property, contentTypePropertyWhitelist);
+    public noMatchingContentTypePropertiesError(properties: string[], contentTypePropertyWhitelist: string[]): never {
+      throw new NoMatchingContentTypePropertiesError(properties, contentTypePropertyWhitelist);
     }
 
     public algoliaSearchRequestError(err: Error): never {
