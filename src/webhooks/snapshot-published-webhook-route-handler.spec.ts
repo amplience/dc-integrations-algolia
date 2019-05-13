@@ -13,6 +13,7 @@ import {
 } from './snapshot-published-webhook';
 import { snapshotPublishedWebhookRouteHandler } from './snapshot-published-webhook-route-handler';
 import { NoMatchingContentTypeSchemaError } from '../errors/no-matching-content-type-schema-error';
+import { NoMatchingContentTypePropertyError } from '../errors/no-matching-content-type-property-error';
 
 const mockProcessWebhook = jest.fn();
 jest.mock(
@@ -40,7 +41,8 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: 'dc-secret',
-        CONTENT_TYPE_WHITELIST: 'schema-id1;schema-id2;schema-id3'
+        CONTENT_TYPE_WHITELIST: 'schema-id1;schema-id2;schema-id3',
+        CONTENT_TYPE_PROPERTY_WHITELIST: 'prop1,prop2,prop3'
       };
     }
   );
@@ -51,7 +53,8 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         {
           clientId: process.env.DC_CLIENT_ID,
           clientSecret: process.env.DC_CLIENT_SECRET,
-          contentTypeWhitelist: process.env.CONTENT_TYPE_WHITELIST.split(';')
+          contentTypeWhitelist: process.env.CONTENT_TYPE_WHITELIST.split(';'),
+          contentTypePropertyWhitelist: process.env.CONTENT_TYPE_PROPERTY_WHITELIST.split(',')
         },
         {
           apiKey: process.env.ALGOLIA_API_KEY,
@@ -78,7 +81,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
       });
 
       const req: express.Request = mocks.createRequest({
@@ -102,7 +105,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
       });
 
       const req: express.Request = mocks.createRequest({
@@ -123,7 +126,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the invalidWebhookRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -150,7 +153,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the unsupportedWebhookError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -177,7 +180,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the dynamicContentRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -204,7 +207,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the noMatchingContentTypeSchemaError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -228,10 +231,37 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       );
     });
 
+    it('Should call the noMatchingContentTypePropertyError presenter method', async (): Promise<void> => {
+      const webhookRequest: WebhookRequest = new WebhookRequest({
+        name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+      });
+
+      mockProcessWebhook.mockImplementationOnce(
+        (request: WebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
+          presenter.noMatchingContentTypePropertyError('my-prop', ['prop1', 'prop2', 'prop3'])
+      );
+
+      const req: express.Request = mocks.createRequest({
+        body: webhookRequest
+      });
+      const res = mocks.createResponse();
+
+      await snapshotPublishedWebhookRouteHandler(
+        req,
+        res,
+        (err): void => {
+          assertProcessWebhookParams(webhookRequest);
+          expect(err).toBeInstanceOf(NoMatchingContentTypePropertyError);
+          expect(err.statusCode).toEqual(202);
+        }
+      );
+    });
+
     it('Should call the algoliaSearchRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+        payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
       });
 
       mockProcessWebhook.mockImplementationOnce(

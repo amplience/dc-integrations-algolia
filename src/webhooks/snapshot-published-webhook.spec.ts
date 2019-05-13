@@ -41,6 +41,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
     'http://deliver.bigcontent.io/schema/nested/nested-type.json',
     'http://deliver.bigcontent.io/schema/my-other-schema-type.json'
   ];
+  const CONTENT_TYPE_PROPERTY_WHITELIST = ['_meta', 'label', 'description'];
 
   const ALGOLIA_API_KEY = 'ALGOLIA_API_KEY';
   const ALGOLIA_APPLICATION_ID = 'ALGOLIA_APPLICATION_ID';
@@ -50,6 +51,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
   const INVALID_WEBHOOK_REQUEST_ERROR = 'invalidWebhookRequestError';
   const DYNAMIC_CONTENT_REQUEST_ERROR = 'dynamicContentRequestError';
   const NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR = 'noMatchingContentTypeSchemaError';
+  const NO_MATCHING_CONTENT_TYPE_PROPERTY_ERROR = 'noMatchingContentTypePropertyError';
   const ALGOLIA_SEARCH_REQUEST_ERROR = 'algoliaSearchRequestError';
   const SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE = 'successfullyAddedToIndex';
 
@@ -70,6 +72,10 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       return NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR;
     }
 
+    public noMatchingContentTypePropertiesError(): string {
+      return NO_MATCHING_CONTENT_TYPE_PROPERTY_ERROR;
+    }
+
     public algoliaSearchRequestError(): string {
       return ALGOLIA_SEARCH_REQUEST_ERROR;
     }
@@ -83,6 +89,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
   let invalidWebhookRequestError;
   let dynamicContentRequestError;
   let noMatchingContentTypeSchemaError;
+  let noMatchingContentTypePropertiesError;
   let algoliaSearchRequestError;
   let successfullyAddedToIndexResponse;
   beforeEach(
@@ -91,6 +98,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       invalidWebhookRequestError = jest.spyOn(fakePresenter, 'invalidWebhookRequestError');
       dynamicContentRequestError = jest.spyOn(fakePresenter, 'dynamicContentRequestError');
       noMatchingContentTypeSchemaError = jest.spyOn(fakePresenter, 'noMatchingContentTypeSchemaError');
+      noMatchingContentTypePropertiesError = jest.spyOn(fakePresenter, 'noMatchingContentTypePropertiesError');
       algoliaSearchRequestError = jest.spyOn(fakePresenter, 'algoliaSearchRequestError');
       successfullyAddedToIndexResponse = jest.spyOn(fakePresenter, 'successfullyAddedToIndex');
     }
@@ -102,7 +110,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -111,7 +120,20 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: 'unsupported',
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+          payload: new Snapshot({
+            id: 'snapshot-id',
+            rootContentItem: {
+              id: 'content-item-id',
+              body: {
+                _meta: {
+                  name: 'this-is-a-name',
+                  schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
+                },
+                description: 'this-is-a-description',
+                label: 'this-is-a-label'
+              }
+            }
+          })
         })
       );
       const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
@@ -125,7 +147,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -133,7 +156,20 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           indexName: ALGOLIA_INDEX_NAME
         },
         new WebhookRequest({
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+          payload: new Snapshot({
+            id: 'snapshot-id',
+            rootContentItem: {
+              id: 'content-item-id',
+              body: {
+                _meta: {
+                  name: 'this-is-a-name',
+                  schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
+                },
+                description: 'this-is-a-description',
+                label: 'this-is-a-label'
+              }
+            }
+          })
         })
       );
       const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
@@ -147,7 +183,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -183,11 +220,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         id: 'content-item-id',
         body: {
           _meta: {
-            name: 'main-banner',
+            name: 'this-is-a-name',
             schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
           },
-          heading: 'Buy more stuff!!',
-          link: 'http://anyafinn.com/buymore?campaign=shouting'
+          description: 'this-is-a-description',
+          label: 'this-is-a-label'
         }
       });
       mockGetContentItems.mockResolvedValueOnce(contentItem);
@@ -205,7 +242,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -216,7 +254,17 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new Snapshot({
             id: 'snapshot-id',
-            rootContentItem: { id: 'content-item-id' }
+            rootContentItem: {
+              id: 'content-item-id',
+              body: {
+                _meta: {
+                  name: 'this-is-a-name',
+                  schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
+                },
+                description: 'this-is-a-description',
+                label: 'this-is-a-label'
+              }
+            }
           })
         })
       );
@@ -270,7 +318,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -279,7 +328,20 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id' } })
+          payload: new Snapshot({
+            id: 'snapshot-id',
+            rootContentItem: {
+              id: 'content-item-id',
+              body: {
+                _meta: {
+                  name: 'this-is-a-name',
+                  schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
+                },
+                description: 'this-is-a-description',
+                label: 'this-is-a-label'
+              }
+            }
+          })
         })
       );
 
@@ -335,7 +397,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -346,7 +409,10 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new Snapshot({
             id: 'snapshot-id',
-            rootContentItem: { id: 'content-item-id' }
+            rootContentItem: {
+              id: contentItem.id,
+              body: contentItem.body
+            }
           })
         })
       );
@@ -364,6 +430,78 @@ describe('SnapshotPublishedWebhook spec', (): void => {
 
       expect(noMatchingContentTypeSchemaError).toHaveBeenCalled();
       expect(response).toEqual(NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR);
+    });
+
+    it('Throws an exception when the content type property cannot be matched', async (): Promise<void> => {
+      const mockGetContentItems = jest.fn();
+      mockDynamicContent.mockImplementation(
+        (): MockContentItemsGet => {
+          return {
+            contentItems: {
+              get: mockGetContentItems
+            }
+          };
+        }
+      );
+
+      const contentItem = new ContentItem({
+        id: 'content-item-id',
+        body: {
+          _meta: {
+            name: 'main-banner',
+            schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
+          }
+          // no known whitelist properties specified
+        }
+      });
+      mockGetContentItems.mockResolvedValueOnce(contentItem);
+
+      const mockAddObject = jest.fn();
+
+      const mockInitIndex = jest.fn().mockReturnValue({
+        addObject: mockAddObject
+      });
+      mockAlgoliasearch.mockReturnValue({
+        initIndex: mockInitIndex
+      });
+
+      const request = new SnapshotPublishedWebhookRequest(
+        {
+          clientId: DC_CLIENT_ID,
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+        },
+        {
+          apiKey: ALGOLIA_API_KEY,
+          applicationId: ALGOLIA_APPLICATION_ID,
+          indexName: ALGOLIA_INDEX_NAME
+        },
+        new WebhookRequest({
+          name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
+          payload: new Snapshot({
+            id: 'snapshot-id',
+            rootContentItem: {
+              id: contentItem.id,
+              body: contentItem.body
+            }
+          })
+        })
+      );
+
+      const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
+
+      expect(mockDynamicContent).toHaveBeenCalledWith(
+        {
+          client_id: DC_CLIENT_ID,
+          client_secret: DC_CLIENT_SECRET
+        },
+        undefined
+      );
+      expect(mockGetContentItems).toHaveBeenCalled();
+
+      expect(noMatchingContentTypePropertiesError).toHaveBeenCalled();
+      expect(response).toEqual(NO_MATCHING_CONTENT_TYPE_PROPERTY_ERROR);
     });
   });
 
@@ -407,7 +545,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
           apiKey: ALGOLIA_API_KEY,
@@ -418,7 +557,17 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new Snapshot({
             id: 'snapshot-id',
-            rootContentItem: { id: 'content-item-id' }
+            rootContentItem: {
+              id: 'content-item-id',
+              body: {
+                _meta: {
+                  name: 'this-is-a-name',
+                  schema: 'https://example.com/content-type.json'
+                },
+                description: 'this-is-a-description',
+                label: 'this-is-a-label'
+              }
+            }
           })
         })
       );

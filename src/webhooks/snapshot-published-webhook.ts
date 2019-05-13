@@ -9,7 +9,12 @@ const log = debug('dc-integrations-algolia:webhook');
 
 export class SnapshotPublishedWebhookRequest {
   public constructor(
-    public readonly dynamicContent: { clientId: string; clientSecret: string; contentTypeWhitelist: string[] },
+    public readonly dynamicContent: {
+      clientId: string;
+      clientSecret: string;
+      contentTypeWhitelist: string[];
+      contentTypePropertyWhitelist: string[];
+    },
     public readonly algolia: { apiKey: string; indexName: string; applicationId: string },
     public readonly webhook: WebhookRequest,
     public readonly dcConfig?: DynamicContentConfig
@@ -30,6 +35,8 @@ export interface SnapshotPublishedWebhookPresenter<T> {
   dynamicContentRequestError(error: Error): T;
 
   noMatchingContentTypeSchemaError(schema: string, contentTypeWhitelist: string[]): T;
+
+  noMatchingContentTypePropertiesError(properties: string[], contentTypePropertyWhitelist: string[]): T;
 
   algoliaSearchRequestError(error: Error): T;
 
@@ -74,7 +81,19 @@ export class SnapshotPublishedWebhook {
       return presenter.noMatchingContentTypeSchemaError(contentItemSchema, contentTypeWhitelist);
     }
 
-    const objectToAddToIndex: AlgoliaObject = { ...contentItem.body, objectID: contentItem.id };
+    const properties = Object.keys(contentItem.body);
+    const includedProperties = SnapshotPublishedWebhook.filterPropertiesInWhitelist(
+      properties,
+      request.dynamicContent.contentTypePropertyWhitelist
+    );
+    if (includedProperties.length == 0) {
+      return presenter.noMatchingContentTypePropertiesError(
+        properties,
+        request.dynamicContent.contentTypePropertyWhitelist
+      );
+    }
+
+    const objectToAddToIndex: AlgoliaObject = { ...includedProperties, objectID: contentItem.id };
     const algoliaIndexName = request.algolia.indexName;
     try {
       const algoliaClient = algoliasearch(request.algolia.applicationId, request.algolia.apiKey);
@@ -89,5 +108,11 @@ export class SnapshotPublishedWebhook {
 
   public static isContentTypeSchemaInWhitelist(schema: string, contentTypeWhitelist: string[]): boolean {
     return contentTypeWhitelist.length == 0 || contentTypeWhitelist.some((schemaId): boolean => schema === schemaId);
+  }
+
+  public static filterPropertiesInWhitelist(properties: string[], propertyWhitelist: string[]): string[] {
+    return properties.filter(
+      (prop): boolean => propertyWhitelist.some((whitelistProp): boolean => whitelistProp === prop)
+    );
   }
 }

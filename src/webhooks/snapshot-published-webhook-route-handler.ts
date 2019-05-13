@@ -17,6 +17,7 @@ import * as debug from 'debug';
 const error = debug('dc-integrations-algolia:webhook-error');
 const warning = debug('dc-integrations-algolia:webhook-warning');
 const success = debug('dc-integrations-algolia:webhook-success');
+import { NoMatchingContentTypePropertyError } from '../errors/no-matching-content-type-property-error';
 
 export const snapshotPublishedWebhookRouteHandler = async (
   req: express.Request,
@@ -24,11 +25,13 @@ export const snapshotPublishedWebhookRouteHandler = async (
   next: express.NextFunction
 ): Promise<void> => {
   const CONTENT_TYPE_WHITELIST = process.env.CONTENT_TYPE_WHITELIST;
+  const CONTENT_TYPE_PROPERTY_WHITELIST = process.env.CONTENT_TYPE_PROPERTY_WHITELIST;
   const request = new SnapshotPublishedWebhookRequest(
     {
       clientId: process.env.DC_CLIENT_ID,
       clientSecret: process.env.DC_CLIENT_SECRET,
-      contentTypeWhitelist: CONTENT_TYPE_WHITELIST ? CONTENT_TYPE_WHITELIST.split(';') : []
+      contentTypeWhitelist: CONTENT_TYPE_WHITELIST ? CONTENT_TYPE_WHITELIST.split(';') : [],
+      contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST ? CONTENT_TYPE_PROPERTY_WHITELIST.split(',') : []
     },
     {
       apiKey: process.env.ALGOLIA_API_KEY,
@@ -65,6 +68,10 @@ export const snapshotPublishedWebhookRouteHandler = async (
         contentTypeWhitelist
       );
       throw new NoMatchingContentTypeSchemaError(schema, contentTypeWhitelist);
+    }
+
+    public noMatchingContentTypePropertyError(property: string, contentTypePropertyWhitelist: string[]): never {
+      throw new NoMatchingContentTypePropertyError(property, contentTypePropertyWhitelist);
     }
 
     public algoliaSearchRequestError(err: Error): never {
