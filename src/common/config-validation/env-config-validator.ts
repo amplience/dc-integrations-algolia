@@ -9,6 +9,11 @@ export interface EnvConfig {
 
 export class EnvConfigValidator {
   public static validateEnvironment(envConfig: EnvConfig): void {
+    const configToValidate: { [key: string]: any } = {
+      ...envConfig,
+      CONTENT_TYPE_WHITELIST: envConfig.CONTENT_TYPE_WHITELIST ? envConfig.CONTENT_TYPE_WHITELIST.split(';') : []
+    };
+
     const envSchema = Joi.object()
       .keys({
         WEBHOOK_SECRET: Joi.string().required(),
@@ -17,11 +22,13 @@ export class EnvConfigValidator {
         ALGOLIA_INDEX_NAME: Joi.string().required(),
         DC_CLIENT_ID: Joi.string().required(),
         DC_CLIENT_SECRET: Joi.string().required(),
-        CONTENT_TYPE_WHITELIST: Joi.string().optional(),
+        CONTENT_TYPE_WHITELIST: Joi.array()
+          .unique()
+          .optional(),
         CONTENT_TYPE_PROPERTY_WHITELIST: Joi.string().optional()
       })
       .unknown();
-    const result = Joi.validate(envConfig, envSchema);
+    const result = Joi.validate(configToValidate, envSchema);
 
     if (result.error !== null) {
       const envErrors = result.error.details.map((detail): string => detail.message);
