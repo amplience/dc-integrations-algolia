@@ -5,8 +5,8 @@ export class NoMatchingContentTypePropertiesError extends Error implements HttpE
   public constructor(properties: string[], propertyWhitelist: string[]) {
     super(
       `None of the content type properties [${properties.join(
-        ', '
-      )}] are listed in the whitelist: [${propertyWhitelist.join(', ')}]`
+        ';'
+      )}] are listed in the whitelist: [${propertyWhitelist.join(';')}]`
     );
   }
 }

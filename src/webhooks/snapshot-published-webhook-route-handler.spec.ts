@@ -42,7 +42,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: 'dc-secret',
         CONTENT_TYPE_WHITELIST: 'schema-id1;schema-id2;schema-id3',
-        CONTENT_TYPE_PROPERTY_WHITELIST: 'prop1,prop2,prop3'
+        CONTENT_TYPE_PROPERTY_WHITELIST: 'prop1;prop2;prop3'
       };
     }
   );
@@ -54,7 +54,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
           clientId: process.env.DC_CLIENT_ID,
           clientSecret: process.env.DC_CLIENT_SECRET,
           contentTypeWhitelist: process.env.CONTENT_TYPE_WHITELIST.split(';'),
-          contentTypePropertyWhitelist: process.env.CONTENT_TYPE_PROPERTY_WHITELIST.split(',')
+          contentTypePropertyWhitelist: process.env.CONTENT_TYPE_PROPERTY_WHITELIST.split(';')
         },
         {
           apiKey: process.env.ALGOLIA_API_KEY,

@@ -15,7 +15,7 @@ describe('end-to-end', (): void => {
       DC_CLIENT_ID: 'dc-client-id',
       DC_CLIENT_SECRET: 'dc-secret',
       CONTENT_TYPE_WHITELIST: 'http://schema-id1.json',
-      CONTENT_TYPE_PROPERTY_WHITELIST: '_meta,text1'
+      CONTENT_TYPE_PROPERTY_WHITELIST: '_meta;text1'
     };
 
     const validWebhook = snapshotPublishedWebhook;

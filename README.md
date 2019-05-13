@@ -60,6 +60,7 @@ ALGOLIA_APPLICATION_ID=my-app-id
 ALGOLIA_API_KEY=my-api-key
 ALGOLIA_INDEX_NAME=my-index-name
 CONTENT_TYPE_WHITELIST=schema-id1;schema-id2;schema-id3
+CONTENT_TYPE_PROPERTY_WHITELIST=prop1;prop2;prop3
 ```
 
 #### 1.1 Using a different Dynamic Content environment

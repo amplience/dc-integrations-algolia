@@ -31,7 +31,7 @@ export const snapshotPublishedWebhookRouteHandler = async (
       clientId: process.env.DC_CLIENT_ID,
       clientSecret: process.env.DC_CLIENT_SECRET,
       contentTypeWhitelist: CONTENT_TYPE_WHITELIST ? CONTENT_TYPE_WHITELIST.split(';') : [],
-      contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST ? CONTENT_TYPE_PROPERTY_WHITELIST.split(',') : []
+      contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST ? CONTENT_TYPE_PROPERTY_WHITELIST.split(';') : []
     },
     {
       apiKey: process.env.ALGOLIA_API_KEY,
@@ -71,6 +71,11 @@ export const snapshotPublishedWebhookRouteHandler = async (
     }
 
     public noMatchingContentTypePropertiesError(properties: string[], contentTypePropertyWhitelist: string[]): never {
+      warning(
+        'Cannot process webhook. No ContentItem properties [%o] are in the whitelist: [%o]',
+        properties,
+        contentTypePropertyWhitelist
+      );
       throw new NoMatchingContentTypePropertiesError(properties, contentTypePropertyWhitelist);
     }
 
