@@ -114,8 +114,8 @@ export class SnapshotPublishedWebhook {
   }
 
   public static filterPropertiesInWhitelist(properties: string[], propertyWhitelist: string[]): string[] {
-    return properties.filter(
-      (prop): boolean => propertyWhitelist.some((whitelistProp): boolean => whitelistProp === prop)
-    );
+    return propertyWhitelist.length > 0
+      ? properties.filter((prop): boolean => propertyWhitelist.some((whitelistProp): boolean => whitelistProp === prop))
+      : properties;
   }
 }

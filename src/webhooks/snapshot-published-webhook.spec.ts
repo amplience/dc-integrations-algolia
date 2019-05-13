@@ -291,6 +291,94 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       expect(response).toEqual(SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE);
       expect(successfullyAddedToIndexResponse).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME, addedObject);
     });
+
+    it('should add the DC Snapshots root ContentItem to the Aloglia index with empty contentTypePropertyWhitelist', async (): Promise<
+      void
+    > => {
+      const mockGetContentItems = jest.fn();
+      mockDynamicContent.mockImplementation(
+        (): MockContentItemsGet => {
+          return {
+            contentItems: {
+              get: mockGetContentItems
+            }
+          };
+        }
+      );
+
+      const contentItem = new ContentItem({
+        id: 'content-item-id',
+        body: {
+          _meta: {
+            name: 'this-is-a-name',
+            schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
+          },
+          description: 'this-is-a-description',
+          label: 'this-is-a-label'
+        }
+      });
+      mockGetContentItems.mockResolvedValueOnce(contentItem);
+
+      const mockAddObject = jest.fn();
+
+      const mockInitIndex = jest.fn().mockReturnValue({
+        addObject: mockAddObject
+      });
+      mockAlgoliasearch.mockReturnValue({
+        initIndex: mockInitIndex
+      });
+
+      const request = new SnapshotPublishedWebhookRequest(
+        {
+          clientId: DC_CLIENT_ID,
+          clientSecret: DC_CLIENT_SECRET,
+          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: []
+        },
+        {
+          apiKey: ALGOLIA_API_KEY,
+          applicationId: ALGOLIA_APPLICATION_ID,
+          indexName: ALGOLIA_INDEX_NAME
+        },
+        new WebhookRequest({
+          name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
+          payload: new Snapshot({
+            id: 'snapshot-id',
+            rootContentItem: {
+              id: 'content-item-id',
+              body: {
+                _meta: {
+                  name: 'this-is-a-name',
+                  schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
+                },
+                description: 'this-is-a-description',
+                label: 'this-is-a-label'
+              }
+            }
+          })
+        })
+      );
+
+      const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
+
+      expect(mockDynamicContent).toHaveBeenCalledWith(
+        {
+          client_id: DC_CLIENT_ID,
+          client_secret: DC_CLIENT_SECRET
+        },
+        undefined
+      );
+      expect(mockGetContentItems).toHaveBeenCalled();
+
+      expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
+      expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
+      const objectID = contentItem.id;
+      const addedObject = { ...contentItem.body, objectID };
+      expect(mockAddObject).toHaveBeenCalledWith(addedObject);
+
+      expect(response).toEqual(SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE);
+      expect(successfullyAddedToIndexResponse).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME, addedObject);
+    });
   });
 
   describe('Dynamic Content Service failures', (): void => {
