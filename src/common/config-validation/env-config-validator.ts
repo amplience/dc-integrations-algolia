@@ -9,7 +9,7 @@ export interface EnvConfig {
 
 export class EnvConfigValidator {
   public static validateEnvironment(envConfig: EnvConfig): void {
-    const configToValidate: { [key: string]: any } = {
+    const configToValidate: { [key: string]: string | string[] } = {
       ...envConfig,
       CONTENT_TYPE_WHITELIST: envConfig.CONTENT_TYPE_WHITELIST ? envConfig.CONTENT_TYPE_WHITELIST.split(';') : []
     };
