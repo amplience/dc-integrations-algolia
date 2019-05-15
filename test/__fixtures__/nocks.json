@@ -36,7 +36,58 @@
   {
     "scope": "https://api.amplience.net:443",
     "method": "get",
-    "path": "/v2/content/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe",
+    "path": "/v2/content/snapshots/5cd3eba6c9e77c000106e28a",
+    "body": "",
+    "status": 200,
+    "response": {
+      "id": "5cd3eba6c9e77c000106e28a",
+      "comment": "Publish Manifest for content item text-area-en",
+      "createdDate": "2019-05-09T08:58:14.309Z",
+      "createdBy": "15a10f53-3685-4cf1-95f5-0f1d2fdcb604",
+      "createdFrom": "content-item",
+      "type": "SYSTEM",
+      "meta": [],
+      "taggedEditions": [],
+      "locale": null,
+      "rootContentItem": {
+        "label": "Text area EN",
+        "contentTypeUri": "http://schema-id1.json",
+        "id": "84a68172-bc22-48ad-b64a-4ae808bb13fe"
+      },
+      "_links": {
+        "self": {
+          "href": "https://api.amplience.net/v2/content/snapshots/5cd3eba6c9e77c000106e28a"
+        },
+        "snapshot": {
+          "href": "https://api.amplience.net/v2/content/snapshots/5cd3eba6c9e77c000106e28a"
+        },
+        "publishing-jobs" : {
+          "href" : "https://api.amplience.net/v2/content/snapshots/5cd3eba6c9e77c000106e28a/publishing-jobs{?page,size,sort}",
+          "templated" : true
+        },
+        "create-publishing-job" : {
+          "href" : "https://api.amplience.net/v2/content/snapshots/5cd3eba6c9e77c000106e28a/publishing-jobs"
+        },
+        "edition-links" : {
+          "href" : "https://api.amplience.net/v2/content/snapshots/5cd3eba6c9e77c000106e28a/edition-links"
+        },
+        "hub" : {
+          "href" : "https://api.amplience.net/v2/content/hubs/5cab0b3446e0fb0334324acf"
+        },
+        "content-root" : {
+          "href" : "https://api.amplience.net/v2/content/content-items/bf6f388c-fc93-44fc-aa66-07df79f52520"
+        },
+        "snapshot-content-item" : {
+          "href" : "https://api.amplience.net/v2/content/snapshots/5cd3eba6c9e77c000106e28a/content-items{/id}",
+          "templated" : true
+        }
+      }
+    }
+  },
+  {
+    "scope": "https://api.amplience.net:443",
+    "method": "get",
+    "path": "/v2/content/snapshots/5cd3eba6c9e77c000106e28a/content-items/84a68172-bc22-48ad-b64a-4ae808bb13fe",
     "body": "",
     "status": 200,
     "response": {

@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
-import { Snapshot } from './snapshot';
+import { WebhookSnapshot } from './webhook-snapshot';
 
 export class WebhookRequest {
   @IsNotEmpty()
@@ -8,8 +8,8 @@ export class WebhookRequest {
 
   @ValidateNested()
   @IsNotEmpty()
-  public payload: Snapshot;
-  public constructor(data: { name?: string; payload?: Snapshot }) {
+  public payload: WebhookSnapshot;
+  public constructor(data: { name?: string; payload?: WebhookSnapshot }) {
     Object.assign(this, data);
   }
 }

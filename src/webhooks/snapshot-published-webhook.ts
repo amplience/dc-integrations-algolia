@@ -68,9 +68,9 @@ export class SnapshotPublishedWebhook {
     const dynamicContent = new DynamicContent(clientCredentials, request.dcConfig);
 
     let contentItem: ContentItem;
-    const contentItemId = request.webhook.payload.rootContentItem.id;
     try {
-      contentItem = await dynamicContent.contentItems.get(contentItemId);
+      const snapshot = await dynamicContent.snapshots.get(request.webhook.payload.id);
+      contentItem = await snapshot.related.snapshotContentItem(request.webhook.payload.rootContentItem.id);
     } catch (err) {
       return presenter.dynamicContentRequestError(err);
     }

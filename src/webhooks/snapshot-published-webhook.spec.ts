@@ -1,5 +1,5 @@
-import { ContentItem } from 'dc-management-sdk-js';
-import { Snapshot } from '../dynamic-content/models/snapshot';
+import { ContentItem, Snapshot } from 'dc-management-sdk-js';
+import { WebhookSnapshot } from '../dynamic-content/models/webhook-snapshot';
 import { WebhookRequest } from '../dynamic-content/models/webhook-request';
 import {
   SnapshotPublishedWebhook,
@@ -30,8 +30,8 @@ jest.mock(
   }
 );
 
-interface MockContentItemsGet {
-  contentItems: { get: Function };
+interface MockSnapshotsGet {
+  snapshots: { get: Function };
 }
 describe('SnapshotPublishedWebhook spec', (): void => {
   const DC_CLIENT_ID = 'DC_CLIENT_ID';
@@ -120,7 +120,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: 'unsupported',
-          payload: new Snapshot({
+          payload: new WebhookSnapshot({
             id: 'snapshot-id',
             rootContentItem: {
               id: 'content-item-id',
@@ -156,7 +156,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           indexName: ALGOLIA_INDEX_NAME
         },
         new WebhookRequest({
-          payload: new Snapshot({
+          payload: new WebhookSnapshot({
             id: 'snapshot-id',
             rootContentItem: {
               id: 'content-item-id',
@@ -203,34 +203,50 @@ describe('SnapshotPublishedWebhook spec', (): void => {
     });
   });
 
+  function setupMockGetSnapshots(): { mockGetSnapshots: jest.Mock; snapshot: Snapshot } {
+    const mockGetSnapshots = jest.fn();
+    mockDynamicContent.mockImplementation(
+      (): MockSnapshotsGet => {
+        return {
+          snapshots: {
+            get: mockGetSnapshots
+          }
+        };
+      }
+    );
+
+    const snapshot = new Snapshot({});
+    mockGetSnapshots.mockResolvedValueOnce(snapshot);
+    return { mockGetSnapshots, snapshot };
+  }
+
+  function setupMockSnapshotContentItem(
+    snapshot,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    contentItemData: any = {
+      id: 'content-item-id',
+      body: {
+        _meta: {
+          name: 'this-is-a-name',
+          schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
+        },
+        description: 'this-is-a-description',
+        label: 'this-is-a-label'
+      }
+    }
+  ): { snapshotContentItemSpy: jest.SpyInstance; contentItem: ContentItem } {
+    const snapshotContentItemSpy = jest.spyOn(snapshot.related, 'snapshotContentItem');
+    const contentItem = new ContentItem(contentItemData);
+    snapshotContentItemSpy.mockResolvedValue(contentItem);
+    return { snapshotContentItemSpy, contentItem };
+  }
+
   describe('valid webhook', (): void => {
     it('should add the DC Snapshots root ContentItem to the Aloglia index', async (): Promise<void> => {
-      const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(
-        (): MockContentItemsGet => {
-          return {
-            contentItems: {
-              get: mockGetContentItems
-            }
-          };
-        }
-      );
-
-      const contentItem = new ContentItem({
-        id: 'content-item-id',
-        body: {
-          _meta: {
-            name: 'this-is-a-name',
-            schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
-          },
-          description: 'this-is-a-description',
-          label: 'this-is-a-label'
-        }
-      });
-      mockGetContentItems.mockResolvedValueOnce(contentItem);
+      const { mockGetSnapshots, snapshot } = setupMockGetSnapshots();
+      const { snapshotContentItemSpy, contentItem } = setupMockSnapshotContentItem(snapshot);
 
       const mockAddObject = jest.fn();
-
       const mockInitIndex = jest.fn().mockReturnValue({
         addObject: mockAddObject
       });
@@ -252,7 +268,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({
+          payload: new WebhookSnapshot({
             id: 'snapshot-id',
             rootContentItem: {
               id: 'content-item-id',
@@ -278,7 +294,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         undefined
       );
-      expect(mockGetContentItems).toHaveBeenCalled();
+      expect(mockGetSnapshots).toHaveBeenCalled();
+      expect(snapshotContentItemSpy).toHaveBeenCalled();
 
       expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
@@ -295,29 +312,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
     it('should add the DC Snapshots root ContentItem to the Aloglia index with empty contentTypePropertyWhitelist', async (): Promise<
       void
     > => {
-      const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(
-        (): MockContentItemsGet => {
-          return {
-            contentItems: {
-              get: mockGetContentItems
-            }
-          };
-        }
-      );
-
-      const contentItem = new ContentItem({
-        id: 'content-item-id',
-        body: {
-          _meta: {
-            name: 'this-is-a-name',
-            schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
-          },
-          description: 'this-is-a-description',
-          label: 'this-is-a-label'
-        }
-      });
-      mockGetContentItems.mockResolvedValueOnce(contentItem);
+      const { mockGetSnapshots, snapshot } = setupMockGetSnapshots();
+      const { snapshotContentItemSpy, contentItem } = setupMockSnapshotContentItem(snapshot);
 
       const mockAddObject = jest.fn();
 
@@ -342,7 +338,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({
+          payload: new WebhookSnapshot({
             id: 'snapshot-id',
             rootContentItem: {
               id: 'content-item-id',
@@ -368,7 +364,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         undefined
       );
-      expect(mockGetContentItems).toHaveBeenCalled();
+      expect(mockGetSnapshots).toHaveBeenCalled();
+      expect(snapshotContentItemSpy).toHaveBeenCalled();
 
       expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
@@ -383,18 +380,9 @@ describe('SnapshotPublishedWebhook spec', (): void => {
 
   describe('Dynamic Content Service failures', (): void => {
     it('Throws an exception when the Dynamic Content SDK throws an error', async (): Promise<void> => {
-      const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(
-        (): MockContentItemsGet => {
-          return {
-            contentItems: {
-              get: mockGetContentItems
-            }
-          };
-        }
-      );
+      const { mockGetSnapshots } = setupMockGetSnapshots();
 
-      mockGetContentItems.mockRejectedValueOnce(new Error('UNAUTHORIZED'));
+      mockGetSnapshots.mockRejectedValueOnce(new Error('UNAUTHORIZED'));
 
       const mockAddObject = jest.fn();
 
@@ -419,7 +407,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({
+          payload: new WebhookSnapshot({
             id: 'snapshot-id',
             rootContentItem: {
               id: 'content-item-id',
@@ -445,24 +433,14 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         undefined
       );
-      expect(mockGetContentItems).toHaveBeenCalled();
+      expect(mockGetSnapshots).toHaveBeenCalled();
 
       expect(dynamicContentRequestError).toHaveBeenCalled();
       expect(response).toEqual(DYNAMIC_CONTENT_REQUEST_ERROR);
     });
     it('Throws an exception when the content type schema id cannot be matched', async (): Promise<void> => {
-      const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(
-        (): MockContentItemsGet => {
-          return {
-            contentItems: {
-              get: mockGetContentItems
-            }
-          };
-        }
-      );
-
-      const contentItem = new ContentItem({
+      const { mockGetSnapshots, snapshot } = setupMockGetSnapshots();
+      const { snapshotContentItemSpy, contentItem } = setupMockSnapshotContentItem(snapshot, {
         id: 'content-item-id',
         body: {
           _meta: {
@@ -473,7 +451,6 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           link: 'http://anyafinn.com/buymore?campaign=shouting'
         }
       });
-      mockGetContentItems.mockResolvedValueOnce(contentItem);
 
       const mockAddObject = jest.fn();
 
@@ -498,7 +475,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({
+          payload: new WebhookSnapshot({
             id: 'snapshot-id',
             rootContentItem: {
               id: contentItem.id,
@@ -517,35 +494,25 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         undefined
       );
-      expect(mockGetContentItems).toHaveBeenCalled();
+      expect(mockGetSnapshots).toHaveBeenCalled();
+      expect(snapshotContentItemSpy).toHaveBeenCalled();
 
       expect(noMatchingContentTypeSchemaError).toHaveBeenCalled();
       expect(response).toEqual(NO_MATCHING_CONTENT_TYPE_SCHEMA_ERROR);
     });
 
     it('Throws an exception when the content type property cannot be matched', async (): Promise<void> => {
-      const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(
-        (): MockContentItemsGet => {
-          return {
-            contentItems: {
-              get: mockGetContentItems
-            }
-          };
-        }
-      );
-
-      const contentItem = new ContentItem({
+      const { mockGetSnapshots, snapshot } = setupMockGetSnapshots();
+      const { snapshotContentItemSpy, contentItem } = setupMockSnapshotContentItem(snapshot, {
         id: 'content-item-id',
         body: {
           _meta: {
-            name: 'main-banner',
+            name: 'this-is-a-name',
             schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
           }
           // no known whitelist properties specified
         }
       });
-      mockGetContentItems.mockResolvedValueOnce(contentItem);
 
       const mockAddObject = jest.fn();
 
@@ -570,7 +537,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({
+          payload: new WebhookSnapshot({
             id: 'snapshot-id',
             rootContentItem: {
               id: contentItem.id,
@@ -589,7 +556,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         undefined
       );
-      expect(mockGetContentItems).toHaveBeenCalled();
+      expect(mockGetSnapshots).toHaveBeenCalled();
+      expect(snapshotContentItemSpy).toHaveBeenCalled();
 
       expect(noMatchingContentTypePropertiesError).toHaveBeenCalled();
       expect(response).toEqual(NO_MATCHING_CONTENT_TYPE_PROPERTY_ERROR);
@@ -598,29 +566,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
 
   describe('Algolia Service failures', (): void => {
     it('Throws an exception when the addObject method throws an error', async (): Promise<void> => {
-      const mockGetContentItems = jest.fn();
-      mockDynamicContent.mockImplementation(
-        (): MockContentItemsGet => {
-          return {
-            contentItems: {
-              get: mockGetContentItems
-            }
-          };
-        }
-      );
-
-      const contentItem = new ContentItem({
-        id: 'content-item-id',
-        body: {
-          _meta: {
-            name: 'main-banner',
-            schema: 'http://deliver.bigcontent.io/schema/nested/nested-type.json'
-          },
-          description: 'this-is-a-description',
-          label: 'this-is-a-label'
-        }
-      });
-      mockGetContentItems.mockResolvedValueOnce(contentItem);
+      const { mockGetSnapshots, snapshot } = setupMockGetSnapshots();
+      setupMockSnapshotContentItem(snapshot);
 
       const mockAddObject = jest.fn();
       mockAddObject.mockRejectedValueOnce(new Error('UNAUTHORIZED'));
@@ -646,7 +593,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         new WebhookRequest({
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-          payload: new Snapshot({
+          payload: new WebhookSnapshot({
             id: 'snapshot-id',
             rootContentItem: {
               id: 'content-item-id',
@@ -672,7 +619,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         undefined
       );
-      expect(mockGetContentItems).toHaveBeenCalled();
+      expect(mockGetSnapshots).toHaveBeenCalled();
 
       expect(algoliaSearchRequestError).toHaveBeenCalled();
       expect(response).toEqual(ALGOLIA_SEARCH_REQUEST_ERROR);

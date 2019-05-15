@@ -8,7 +8,7 @@ export class SnapshotRootContentItem {
   public body: object;
 }
 
-export class Snapshot {
+export class WebhookSnapshot {
   @IsString()
   @IsNotEmpty()
   public id: string;
