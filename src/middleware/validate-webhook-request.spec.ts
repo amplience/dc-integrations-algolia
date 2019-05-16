@@ -117,7 +117,7 @@ describe('ValidateWebhookRequest', (): void => {
       );
     }
 
-    test('should not throw an error when WebhookSignature.calculate() matches the X-Amplience-Webhook-Signature header', async (): Promise<
+    it('should not throw an error when WebhookSignature.calculate() matches the X-Amplience-Webhook-Signature header', async (): Promise<
       void
     > => {
       mockCalculate.mockReturnValue('webhook-signature');
@@ -125,7 +125,7 @@ describe('ValidateWebhookRequest', (): void => {
       expect(error).toBeUndefined();
     });
 
-    test('should throw an error when WebhookSignature.calculate() matches the X-Amplience-Webhook-Signature header', async (): Promise<
+    it('should throw an error when WebhookSignature.calculate() matches the X-Amplience-Webhook-Signature header', async (): Promise<
       void
     > => {
       mockCalculate.mockReturnValue('different-signature');
@@ -167,7 +167,7 @@ describe('ValidateWebhookRequest', (): void => {
       );
     }
 
-    test('should not throw any error when Content-Type header is set to application/json', async (done): Promise<
+    it('should not throw any error when Content-Type header is set to application/json', async (done): Promise<
       void
     > => {
       try {
@@ -179,7 +179,7 @@ describe('ValidateWebhookRequest', (): void => {
       }
     });
 
-    test('should throw an error when Content-Type header is not set', async (done): Promise<void> => {
+    it('should throw an error when Content-Type header is not set', async (done): Promise<void> => {
       try {
         await invokeValidateHeadersMiddleware({});
         done.fail('Expected an error to be thrown');
@@ -191,7 +191,7 @@ describe('ValidateWebhookRequest', (): void => {
       }
     });
 
-    test('should throw an error when Content-Type header is not application/json', async (done): Promise<void> => {
+    it('should throw an error when Content-Type header is not application/json', async (done): Promise<void> => {
       try {
         await invokeValidateHeadersMiddleware({ 'Content-Type': 'text/html' });
         done.fail('Expected an error to be thrown');
