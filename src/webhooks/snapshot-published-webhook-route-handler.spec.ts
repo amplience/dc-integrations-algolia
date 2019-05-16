@@ -72,6 +72,29 @@ describe('SnapshotPublishedRouteHandler', (): void => {
   }
 
   describe('Route handler tests', (): void => {
+    it('Should process a missing or empty property whitelist', async (): Promise<void> => {
+      process.env.CONTENT_TYPE_PROPERTY_WHITELIST = undefined;
+      mockProcessWebhook.mockImplementationOnce(
+        (request: SnapshotPublishedWebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
+          presenter.successfullyAddedToIndex(request.algolia.indexName, { objectID: 'content-item-id' })
+      );
+
+      const webhookRequest: WebhookRequest = new WebhookRequest({
+        name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
+        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+      });
+
+      const req: express.Request = mocks.createRequest({
+        body: webhookRequest
+      });
+      const res = mocks.createResponse();
+
+      await snapshotPublishedWebhookRouteHandler(req, res, (): void => {});
+
+      expect(mockProcessWebhook.mock.calls[0][0].dynamicContent.contentTypePropertyWhitelist).toEqual([]);
+      expect(res._getStatusCode()).toEqual(202);
+    });
+
     it('Should process a missing or empty whitelist', async (): Promise<void> => {
       process.env.CONTENT_TYPE_WHITELIST = undefined;
       mockProcessWebhook.mockImplementationOnce(
