@@ -115,5 +115,22 @@ describe('env-config-validator', (): void => {
       );
       expect(processExitSpy).toHaveBeenCalledWith(1);
     });
+
+    it('should exit the process if a value is supplied for property whitelist which has dupes', (): void => {
+      EnvConfigValidator.validateEnvironment({
+        WEBHOOK_SECRET: 'secret',
+        ALGOLIA_API_KEY: 'algolia-api-key',
+        ALGOLIA_APPLICATION_ID: 'algolia-application-id',
+        ALGOLIA_INDEX_NAME: 'algolia-index-name',
+        DC_CLIENT_ID: 'dc-client-id',
+        DC_CLIENT_SECRET: 'dc-secret',
+        CONTENT_TYPE_PROPERTY_WHITELIST: 'prop1;prop2;prop1'
+      });
+      expect(validateSpy.mock.results[0].value.error).toBeDefined();
+      expect(validateSpy.mock.results[0].value.error.details[0].message).toEqual(
+        '"CONTENT_TYPE_PROPERTY_WHITELIST" position 2 contains a duplicate value'
+      );
+      expect(processExitSpy).toHaveBeenCalledWith(1);
+    });
   });
 });
