@@ -194,6 +194,10 @@
         "schema": "http://schema-id1.json"
       },
       "text1": "Text area EN - 10:18",
+      "_lastModifiedDate": 1558531107,
+      "_snapshotCreatedDate": 1557392294,
+      "_contentItemCreatedDate": 1544449310,
+      "_contentItemLastModifiedDate": 1557478081,
       "objectID": "84a68172-bc22-48ad-b64a-4ae808bb13fe"
     },
     "status": 201,
