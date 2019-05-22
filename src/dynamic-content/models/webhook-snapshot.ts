@@ -13,10 +13,14 @@ export class WebhookSnapshot {
   @IsNotEmpty()
   public id: string;
 
+  @IsString()
+  @IsNotEmpty()
+  public createdDate: string;
+
   @ValidateNested()
   public rootContentItem: SnapshotRootContentItem;
 
-  public constructor(data: { id: string; rootContentItem: SnapshotRootContentItem }) {
+  public constructor(data: { id: string; createdDate: string; rootContentItem: SnapshotRootContentItem }) {
     Object.assign(this, data);
   }
 }

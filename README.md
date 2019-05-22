@@ -26,6 +26,11 @@ An example of our implemented presenter can be found [here](src/webhooks/snapsho
 
 * Adds the top-level Dynamic Content Content-Item (keyed on the Content Item id) to your Algolia Search index when you publish a content graph
 * Validates the Dynamic Content Webhook using a predefined secret
+* Appends several unix formatted date fields to your Algolia record that you may useful when [sorting your index by date](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-an-index-by-date/):
+  * "_lastModifiedDate" - Algolia Record last modified date
+  * "_snapshotCreatedDate" - Snapshot created Date
+  * "_contentItemCreatedDate" - ContentItem created date
+  * "_contentItemLastModifiedDate" - ContentItem last modified date
 
 ## Installation
 
