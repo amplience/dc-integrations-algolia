@@ -7,6 +7,7 @@
     "start": "DEBUG=dc-integrations-algolia:*,express:* ts-node -r tsconfig-paths/register src/index.ts",
     "start:dev": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
+    "start:heroku": "node dist/src/index.js",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"**/*.ts\" --write",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
