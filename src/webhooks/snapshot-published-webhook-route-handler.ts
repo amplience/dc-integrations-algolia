@@ -86,7 +86,7 @@ export const snapshotPublishedWebhookRouteHandler = async (
 
     public successfullyAddedToIndex(algoliaIndexName: string, addedObject: AlgoliaObject): void {
       success('Successfully added %j to index "%s"', addedObject, algoliaIndexName);
-      res.status(202).send({ message: `Successfully added to index "${algoliaIndexName}"`, addedObject: addedObject });
+      res.status(200).send({ message: `Successfully added to index "${algoliaIndexName}"`, addedObject: addedObject });
     }
   })();
   try {
