@@ -126,6 +126,15 @@ Publishing a content item should now trigger your Algolia integration to be invo
   express:router dispatching POST /webhook +0ms
 ```
 
+## Response Codes
+The application will respond with the following HTTP status codes based on the outcome of processing the webhook:
+
+|  HTTP Status 	|   Outcome	|   Retryable	|
+|-----|------|-------|
+|  200 	|  Successfully processed 	|   N/A	|
+|  202 	|  Accepted but not processed 	|   False	|
+|  500 	|  An error occurred 	|   True	|
+
 ## Built with
 * [Express](https://www.npmjs.com/package/express) - API framework
 * [Amplience Dynamic Content SDK](https://www.npmjs.com/package/dc-management-sdk-js) - Used for fetching content from the Amplience Dynamic Content service.
