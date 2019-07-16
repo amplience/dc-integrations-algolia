@@ -95,7 +95,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       await snapshotPublishedWebhookRouteHandler(req, res, (): void => {});
 
       expect(mockProcessWebhook.mock.calls[0][0].dynamicContent.contentTypePropertyWhitelist).toEqual([]);
-      expect(res._getStatusCode()).toEqual(202);
+      expect(res._getStatusCode()).toEqual(200);
     });
 
     it('Should process a missing or empty whitelist', async (): Promise<void> => {
@@ -121,7 +121,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       await snapshotPublishedWebhookRouteHandler(req, res, (): void => {});
 
       expect(mockProcessWebhook.mock.calls[0][0].dynamicContent.contentTypeWhitelist).toEqual([]);
-      expect(res._getStatusCode()).toEqual(202);
+      expect(res._getStatusCode()).toEqual(200);
     });
   });
 
@@ -148,7 +148,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       await snapshotPublishedWebhookRouteHandler(req, res, (): void => {});
 
       assertProcessWebhookParams(webhookRequest);
-      expect(res._getStatusCode()).toEqual(202);
+      expect(res._getStatusCode()).toEqual(200);
       expect(res._getData()).toEqual({
         addedObject: { objectID: 'content-item-id', publishedDate: '2019-07-15T00:00:00.000Z' },
         message: 'Successfully added to index "algolia-index-name"'

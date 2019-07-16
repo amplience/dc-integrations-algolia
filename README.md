@@ -6,6 +6,7 @@
 
 ![License - Apache 2](https://img.shields.io/badge/license-Apache%202-blue.svg)
 ![](https://img.shields.io/badge/node-v8%2B-blue.svg) 
+![https://travis-ci.org/amplience/dc-integrations-algolia](https://travis-ci.org/amplience/dc-integrations-algolia.svg?branch=master)
 
 This project is a sample webhook integration that demonstrates how you can keep your Algolia Search index up-to-date with published content from Dynamic Content.
 
@@ -124,6 +125,15 @@ Publishing a content item should now trigger your Algolia integration to be invo
   express:router router  : /webhook +1ms
   express:router dispatching POST /webhook +0ms
 ```
+
+## Response Codes
+The application will respond with the following HTTP status codes based on the outcome of processing the webhook:
+
+|  HTTP Status 	|   Outcome	|   Retryable	|
+|-----|------|-------|
+|  200 	|  Successfully processed 	|   N/A	|
+|  202 	|  Accepted but not processed 	|   False	|
+|  500 	|  An error occurred 	|   True	|
 
 ## Built with
 * [Express](https://www.npmjs.com/package/express) - API framework

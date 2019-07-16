@@ -44,7 +44,7 @@ describe('end-to-end', (): void => {
         WebhookSignature.calculate(new Buffer(JSON.stringify(validWebhook)), process.env.WEBHOOK_SECRET)
       )
       .send(snapshotPublishedWebhook)
-      .expect(202, {
+      .expect(200, {
         message: `Successfully added to index "${process.env.ALGOLIA_INDEX_NAME}"`,
         addedObject: {
           _meta: { name: 'text-area-en', schema: 'http://schema-id1.json' },
