@@ -76,7 +76,10 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       process.env.CONTENT_TYPE_PROPERTY_WHITELIST = undefined;
       mockProcessWebhook.mockImplementationOnce(
         (request: SnapshotPublishedWebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
-          presenter.successfullyAddedToIndex(request.algolia.indexName, { objectID: 'content-item-id' })
+          presenter.successfullyAddedToIndex(request.algolia.indexName, {
+            objectID: 'content-item-id',
+            publishedDate: '2019-07-15T00:00:00.000Z'
+          })
       );
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
@@ -99,7 +102,10 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       process.env.CONTENT_TYPE_WHITELIST = undefined;
       mockProcessWebhook.mockImplementationOnce(
         (request: SnapshotPublishedWebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
-          presenter.successfullyAddedToIndex(request.algolia.indexName, { objectID: 'content-item-id' })
+          presenter.successfullyAddedToIndex(request.algolia.indexName, {
+            objectID: 'content-item-id',
+            publishedDate: '2019-07-15T00:00:00.000Z'
+          })
       );
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
@@ -123,7 +129,10 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the successfullyAddedToIndex presenter method', async (): Promise<void> => {
       mockProcessWebhook.mockImplementationOnce(
         (request: SnapshotPublishedWebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
-          presenter.successfullyAddedToIndex(request.algolia.indexName, { objectID: 'content-item-id' })
+          presenter.successfullyAddedToIndex(request.algolia.indexName, {
+            objectID: 'content-item-id',
+            publishedDate: '2019-07-15T00:00:00.000Z'
+          })
       );
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
@@ -141,7 +150,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       assertProcessWebhookParams(webhookRequest);
       expect(res._getStatusCode()).toEqual(202);
       expect(res._getData()).toEqual({
-        addedObject: { objectID: 'content-item-id' },
+        addedObject: { objectID: 'content-item-id', publishedDate: '2019-07-15T00:00:00.000Z' },
         message: 'Successfully added to index "algolia-index-name"'
       });
     });

@@ -4,8 +4,22 @@ import { AMPLIENCE_WEBHOOK_SIGNATURE_HEADER } from '../src/middleware/validate-w
 import { WebhookSignature } from 'dc-management-sdk-js';
 import * as snapshotPublishedWebhook from './__fixtures__/snapshot-published-webhook.json';
 import * as nock from 'nock';
+import * as mockDate from './helpers/mock-date';
 
 describe('end-to-end', (): void => {
+  beforeAll(
+    (): void => {
+      mockDate.setup();
+    }
+  );
+
+  afterAll(
+    (): void => {
+      mockDate.restore();
+      jest.restoreAllMocks();
+    }
+  );
+
   it('should accept valid webhook and add a ContentItem to the Algolia index', async (): Promise<void> => {
     process.env = {
       WEBHOOK_SECRET: 'webhook-secret',
@@ -35,7 +49,8 @@ describe('end-to-end', (): void => {
         addedObject: {
           _meta: { name: 'text-area-en', schema: 'http://schema-id1.json' },
           text1: 'Text area EN - 10:18',
-          objectID: '84a68172-bc22-48ad-b64a-4ae808bb13fe'
+          objectID: '84a68172-bc22-48ad-b64a-4ae808bb13fe',
+          publishedDate: '2019-07-15T00:00:00.000Z'
         }
       });
   });

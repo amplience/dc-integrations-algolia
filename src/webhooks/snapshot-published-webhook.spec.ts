@@ -6,6 +6,7 @@ import {
   SnapshotPublishedWebhookPresenter,
   SnapshotPublishedWebhookRequest
 } from './snapshot-published-webhook';
+import * as mockDate from '../../test/helpers/mock-date';
 
 const mockDynamicContent = jest.fn();
 jest.mock(
@@ -101,6 +102,19 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       noMatchingContentTypePropertiesError = jest.spyOn(fakePresenter, 'noMatchingContentTypePropertiesError');
       algoliaSearchRequestError = jest.spyOn(fakePresenter, 'algoliaSearchRequestError');
       successfullyAddedToIndexResponse = jest.spyOn(fakePresenter, 'successfullyAddedToIndex');
+    }
+  );
+
+  beforeAll(
+    (): void => {
+      mockDate.setup();
+    }
+  );
+
+  afterAll(
+    (): void => {
+      mockDate.restore();
+      jest.restoreAllMocks();
     }
   );
 
@@ -302,7 +316,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       const description = contentItem.body.description;
       const label = contentItem.body.label;
       const objectID = contentItem.id;
-      const addedObject = { description, label, objectID };
+      const publishedDate = new Date().toISOString();
+      const addedObject = { description, label, objectID, publishedDate };
       expect(mockAddObject).toHaveBeenCalledWith(addedObject);
 
       expect(response).toEqual(SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE);
@@ -370,7 +385,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
       const objectID = contentItem.id;
-      const addedObject = { ...contentItem.body, objectID };
+      const publishedDate = new Date().toISOString();
+      const addedObject = { ...contentItem.body, objectID, publishedDate };
       expect(mockAddObject).toHaveBeenCalledWith(addedObject);
 
       expect(response).toEqual(SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE);
