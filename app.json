@@ -33,7 +33,8 @@
             "description": "Content Type WhiteList"
         },
         "CONTENT_TYPE_PROPERTY_WHITELIST": {
-            "description": "Content Type Property WhiteList"
+            "description": "Content Type Property WhiteList",
+            "required": false
         }
     }
 }
