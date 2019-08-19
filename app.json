@@ -35,6 +35,14 @@
         "CONTENT_TYPE_PROPERTY_WHITELIST": {
             "description": "Content Type Property WhiteList",
             "required": false
+        },
+        "DC_API_URL": {
+            "description": "Dynamic Content API URL",
+            "required": false
+        },
+       "DC_AUTH_URL": {
+            "description": "Amplience Auth URL",
+            "required": false
         }
     }
 }
