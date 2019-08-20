@@ -21,7 +21,7 @@ interface MockGetApiKeyFunctionResponse {
 
 describe('AlgoliaCredentialsValidator', (): void => {
   const ALGOLIA_APPLICATION_ID = 'ALGOLIA_APPLICATION_ID';
-  const ALGOLIA_API_KEY = 'ALGOLIA_API_KEY';
+  const ALGOLIA_WRITE_API_KEY = 'ALGOLIA_WRITE_API_KEY';
   const ALGOLIA_INDEX_NAME = 'MY_INDEX';
   let processExitSpy;
 
@@ -57,11 +57,11 @@ describe('AlgoliaCredentialsValidator', (): void => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY,
+        apiKey: ALGOLIA_WRITE_API_KEY,
         algoliaIndex: ALGOLIA_INDEX_NAME
       });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
-      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
+      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_WRITE_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
 
@@ -80,11 +80,11 @@ describe('AlgoliaCredentialsValidator', (): void => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY,
+        apiKey: ALGOLIA_WRITE_API_KEY,
         algoliaIndex: ALGOLIA_INDEX_NAME
       });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
-      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
+      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_WRITE_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
 
@@ -103,11 +103,11 @@ describe('AlgoliaCredentialsValidator', (): void => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY,
+        apiKey: ALGOLIA_WRITE_API_KEY,
         algoliaIndex: ALGOLIA_INDEX_NAME
       });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
-      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
+      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_WRITE_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
 
@@ -126,11 +126,11 @@ describe('AlgoliaCredentialsValidator', (): void => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY,
+        apiKey: ALGOLIA_WRITE_API_KEY,
         algoliaIndex: ALGOLIA_INDEX_NAME
       });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
-      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
+      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_WRITE_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
 
@@ -149,11 +149,11 @@ describe('AlgoliaCredentialsValidator', (): void => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY,
+        apiKey: ALGOLIA_WRITE_API_KEY,
         algoliaIndex: ALGOLIA_INDEX_NAME
       });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
-      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
+      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_WRITE_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(0);
     });
 
@@ -175,11 +175,11 @@ describe('AlgoliaCredentialsValidator', (): void => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY,
+        apiKey: ALGOLIA_WRITE_API_KEY,
         algoliaIndex: ALGOLIA_INDEX_NAME
       });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
-      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
+      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_WRITE_API_KEY);
       expect(mockGetApiKey).toThrowError(errorMessage);
       expect(processExitSpy).toHaveBeenCalledTimes(1);
     });
@@ -201,11 +201,11 @@ describe('AlgoliaCredentialsValidator', (): void => {
 
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY,
+        apiKey: ALGOLIA_WRITE_API_KEY,
         algoliaIndex: ALGOLIA_INDEX_NAME
       });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
-      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
+      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_WRITE_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -225,11 +225,11 @@ describe('AlgoliaCredentialsValidator', (): void => {
       );
       await AlgoliaCredentialsValidator.validateCredentials({
         applicationId: ALGOLIA_APPLICATION_ID,
-        apiKey: ALGOLIA_API_KEY,
+        apiKey: ALGOLIA_WRITE_API_KEY,
         algoliaIndex: ALGOLIA_INDEX_NAME
       });
-      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
-      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_API_KEY);
+      expect(mockAlgoliaSearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
+      expect(mockGetApiKey).toHaveBeenCalledWith(ALGOLIA_WRITE_API_KEY);
       expect(processExitSpy).toHaveBeenCalledTimes(1);
     });
   });

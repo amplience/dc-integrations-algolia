@@ -9,7 +9,7 @@ export default (): express.Application => {
 
   router.post(
     '/webhook',
-    ValidateWebhookRequest.middleware(process.env.WEBHOOK_SECRET),
+    ValidateWebhookRequest.middleware(process.env.DC_WEBHOOK_SECRET),
     snapshotPublishedWebhookRouteHandler
   );
 

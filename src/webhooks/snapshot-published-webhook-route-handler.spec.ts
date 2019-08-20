@@ -36,13 +36,13 @@ describe('SnapshotPublishedRouteHandler', (): void => {
       jest.resetAllMocks();
       // set up environment variables
       process.env = {
-        ALGOLIA_API_KEY: 'algolia-api-key',
+        ALGOLIA_WRITE_API_KEY: 'algolia-api-key',
         ALGOLIA_APPLICATION_ID: 'algolia-app-id',
         ALGOLIA_INDEX_NAME: 'algolia-index-name',
         DC_CLIENT_ID: 'dc-client-id',
         DC_CLIENT_SECRET: 'dc-secret',
-        CONTENT_TYPE_WHITELIST: 'schema-id1;schema-id2;schema-id3',
-        CONTENT_TYPE_PROPERTY_WHITELIST: 'prop1;prop2;prop3'
+        DC_CONTENT_TYPE_WHITELIST: 'schema-id1;schema-id2;schema-id3',
+        DC_CONTENT_TYPE_PROPERTY_WHITELIST: 'prop1;prop2;prop3'
       };
     }
   );
@@ -53,11 +53,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
         {
           clientId: process.env.DC_CLIENT_ID,
           clientSecret: process.env.DC_CLIENT_SECRET,
-          contentTypeWhitelist: process.env.CONTENT_TYPE_WHITELIST.split(';'),
-          contentTypePropertyWhitelist: process.env.CONTENT_TYPE_PROPERTY_WHITELIST.split(';')
+          contentTypeWhitelist: process.env.DC_CONTENT_TYPE_WHITELIST.split(';'),
+          contentTypePropertyWhitelist: process.env.DC_CONTENT_TYPE_PROPERTY_WHITELIST.split(';')
         },
         {
-          apiKey: process.env.ALGOLIA_API_KEY,
+          apiKey: process.env.ALGOLIA_WRITE_API_KEY,
           indexName: process.env.ALGOLIA_INDEX_NAME,
           applicationId: process.env.ALGOLIA_APPLICATION_ID
         },
@@ -73,7 +73,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
 
   describe('Route handler tests', (): void => {
     it('Should process a missing or empty property whitelist', async (): Promise<void> => {
-      process.env.CONTENT_TYPE_PROPERTY_WHITELIST = undefined;
+      process.env.DC_CONTENT_TYPE_PROPERTY_WHITELIST = undefined;
       mockProcessWebhook.mockImplementationOnce(
         (request: SnapshotPublishedWebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
           presenter.successfullyAddedToIndex(request.algolia.indexName, { objectID: 'content-item-id' })
@@ -100,7 +100,7 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     });
 
     it('Should process a missing or empty whitelist', async (): Promise<void> => {
-      process.env.CONTENT_TYPE_WHITELIST = undefined;
+      process.env.DC_CONTENT_TYPE_WHITELIST = undefined;
       mockProcessWebhook.mockImplementationOnce(
         (request: SnapshotPublishedWebhookRequest, presenter: SnapshotPublishedWebhookPresenter<void>): void =>
           presenter.successfullyAddedToIndex(request.algolia.indexName, { objectID: 'content-item-id' })

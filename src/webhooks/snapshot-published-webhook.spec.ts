@@ -36,14 +36,14 @@ interface MockSnapshotsGet {
 describe('SnapshotPublishedWebhook spec', (): void => {
   const DC_CLIENT_ID = 'DC_CLIENT_ID';
   const DC_CLIENT_SECRET = 'DC_CLIENT_SECRET';
-  const CONTENT_TYPE_WHITELIST = [
+  const DC_CONTENT_TYPE_WHITELIST = [
     'http://deliver.bigcontent.io/schema/my-schema-type.json',
     'http://deliver.bigcontent.io/schema/nested/nested-type.json',
     'http://deliver.bigcontent.io/schema/my-other-schema-type.json'
   ];
-  const CONTENT_TYPE_PROPERTY_WHITELIST = ['label', 'description'];
+  const DC_CONTENT_TYPE_PROPERTY_WHITELIST = ['label', 'description'];
 
-  const ALGOLIA_API_KEY = 'ALGOLIA_API_KEY';
+  const ALGOLIA_WRITE_API_KEY = 'ALGOLIA_WRITE_API_KEY';
   const ALGOLIA_APPLICATION_ID = 'ALGOLIA_APPLICATION_ID';
   const ALGOLIA_INDEX_NAME = 'ALGOLIA_INDEX_NAME';
 
@@ -110,11 +110,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
-          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
@@ -148,11 +148,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
-          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
@@ -185,11 +185,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
-          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
@@ -262,11 +262,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
-          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
@@ -304,7 +304,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       expect(mockGetSnapshots).toHaveBeenCalled();
       expect(snapshotContentItemSpy).toHaveBeenCalled();
 
-      expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
+      expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
       const description = contentItem.body.description;
       const label = contentItem.body.label;
@@ -343,11 +343,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
           contentTypePropertyWhitelist: []
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
@@ -383,7 +383,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       expect(mockGetSnapshots).toHaveBeenCalled();
       expect(snapshotContentItemSpy).toHaveBeenCalled();
 
-      expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY);
+      expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
       const objectID = contentItem.id;
       const addedObject = {
@@ -420,11 +420,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
-          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
@@ -489,11 +489,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
-          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
@@ -552,11 +552,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
-          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
@@ -609,11 +609,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         {
           clientId: DC_CLIENT_ID,
           clientSecret: DC_CLIENT_SECRET,
-          contentTypeWhitelist: CONTENT_TYPE_WHITELIST,
-          contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST
+          contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST,
+          contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
         },
         {
-          apiKey: ALGOLIA_API_KEY,
+          apiKey: ALGOLIA_WRITE_API_KEY,
           applicationId: ALGOLIA_APPLICATION_ID,
           indexName: ALGOLIA_INDEX_NAME
         },
