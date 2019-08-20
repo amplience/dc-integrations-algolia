@@ -24,17 +24,19 @@ export const snapshotPublishedWebhookRouteHandler = async (
   res: express.Response,
   next: express.NextFunction
 ): Promise<void> => {
-  const CONTENT_TYPE_WHITELIST = process.env.CONTENT_TYPE_WHITELIST;
-  const CONTENT_TYPE_PROPERTY_WHITELIST = process.env.CONTENT_TYPE_PROPERTY_WHITELIST;
+  const DC_CONTENT_TYPE_WHITELIST = process.env.DC_CONTENT_TYPE_WHITELIST;
+  const DC_CONTENT_TYPE_PROPERTY_WHITELIST = process.env.DC_CONTENT_TYPE_PROPERTY_WHITELIST;
   const request = new SnapshotPublishedWebhookRequest(
     {
       clientId: process.env.DC_CLIENT_ID,
       clientSecret: process.env.DC_CLIENT_SECRET,
-      contentTypeWhitelist: CONTENT_TYPE_WHITELIST ? CONTENT_TYPE_WHITELIST.split(';') : [],
-      contentTypePropertyWhitelist: CONTENT_TYPE_PROPERTY_WHITELIST ? CONTENT_TYPE_PROPERTY_WHITELIST.split(';') : []
+      contentTypeWhitelist: DC_CONTENT_TYPE_WHITELIST ? DC_CONTENT_TYPE_WHITELIST.split(';') : [],
+      contentTypePropertyWhitelist: DC_CONTENT_TYPE_PROPERTY_WHITELIST
+        ? DC_CONTENT_TYPE_PROPERTY_WHITELIST.split(';')
+        : []
     },
     {
-      apiKey: process.env.ALGOLIA_API_KEY,
+      apiKey: process.env.ALGOLIA_WRITE_API_KEY,
       applicationId: process.env.ALGOLIA_APPLICATION_ID,
       indexName: process.env.ALGOLIA_INDEX_NAME
     },
