@@ -22,14 +22,14 @@ describe('end-to-end', (): void => {
 
   it('should accept valid webhook and add a ContentItem to the Algolia index', async (): Promise<void> => {
     process.env = {
-      WEBHOOK_SECRET: 'webhook-secret',
-      ALGOLIA_API_KEY: 'algolia-api-key',
+      DC_WEBHOOK_SECRET: 'webhook-secret',
+      ALGOLIA_WRITE_API_KEY: 'algolia-api-key',
       ALGOLIA_APPLICATION_ID: 'algolia-app-id',
       ALGOLIA_INDEX_NAME: 'algolia-index-name',
       DC_CLIENT_ID: 'dc-client-id',
       DC_CLIENT_SECRET: 'dc-secret',
-      CONTENT_TYPE_WHITELIST: 'http://schema-id1.json',
-      CONTENT_TYPE_PROPERTY_WHITELIST: '_meta;text1'
+      DC_CONTENT_TYPE_WHITELIST: 'http://schema-id1.json',
+      DC_CONTENT_TYPE_PROPERTY_WHITELIST: '_meta;text1'
     };
 
     const validWebhook = snapshotPublishedWebhook;
@@ -43,7 +43,7 @@ describe('end-to-end', (): void => {
       .set('Content-Type', 'application/json')
       .set(
         AMPLIENCE_WEBHOOK_SIGNATURE_HEADER,
-        WebhookSignature.calculate(new Buffer(JSON.stringify(validWebhook)), process.env.WEBHOOK_SECRET)
+        WebhookSignature.calculate(new Buffer(JSON.stringify(validWebhook)), process.env.DC_WEBHOOK_SECRET)
       )
       .send(snapshotPublishedWebhook)
       .expect(200, {

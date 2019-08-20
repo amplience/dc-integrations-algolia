@@ -20,7 +20,7 @@ const log = debug('dc-integrations-algolia:app');
   );
 
   await AlgoliaCredentialsValidator.validateCredentials({
-    apiKey: process.env.ALGOLIA_API_KEY,
+    apiKey: process.env.ALGOLIA_WRITE_API_KEY,
     applicationId: process.env.ALGOLIA_APPLICATION_ID,
     algoliaIndex: process.env.ALGOLIA_INDEX_NAME
   });
