@@ -54,6 +54,11 @@ The below command will run unit tests for the project and cover:
 npm run test
 ```
 
+## Running on Heroku
+Running the application on Heroku is no different to running it locally except that Heroku does all the installation of packages, runs the application upon deployment and exposes the application externally.
+We therefore recommend following the development running guide and skip sections 2 and 3. Please take note that there is a required environment variable to run the application on Heroku, 
+that is not required for running the application normally. 
+
 ## Running in Development mode 
 
 ### 1. Configure your environment
@@ -72,6 +77,7 @@ The configurable parameters and where they can be found are listed in the table 
 |  DC_AUTH_URL 	                          |  https://... 	                      |  false      |  You can use different Amplience authentication environments using this parameter                                                                                                                 |
 |  ALGOLIA_APPLICATION_ID 	              |  FL8ZBJV111 	                      |  true       |  Taken from the 'API Keys' page on the Algolia site. 	                                                                                                                                            |
 |  ALGOLIA_WRITE_API_KEY 	                |  8c2f4b6a10534481fba2a3c78417eaa5 	|  true       |  Taken from the 'API Keys' page on the Algolia site. This needs to be the Write or Admin key, not the Search key. 	                                                                              |
+|  NPM_CONFIG_PRODUCTION 	                |  false                             	|  false*     |  *This is required when deploying to Heroku and stops the devDependencies being removed. We have chosen this method of deployment to remove the requirement of bundling the application.  	                                                                              |
 
 ### 2. Start the application
 To run this application locally, run the following (default port is 3000)
