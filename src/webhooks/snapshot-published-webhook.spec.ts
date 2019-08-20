@@ -136,6 +136,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: 'unsupported',
           payload: new WebhookSnapshot({
             id: 'snapshot-id',
+            createdDate: '2019-01-02T03:04:05.06Z',
             rootContentItem: {
               id: 'content-item-id',
               body: {
@@ -172,6 +173,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         new WebhookRequest({
           payload: new WebhookSnapshot({
             id: 'snapshot-id',
+            createdDate: '2019-01-02T03:04:05.06Z',
             rootContentItem: {
               id: 'content-item-id',
               body: {
@@ -246,7 +248,9 @@ describe('SnapshotPublishedWebhook spec', (): void => {
         },
         description: 'this-is-a-description',
         label: 'this-is-a-label'
-      }
+      },
+      createdDate: '2019-01-02T03:04:05.06Z',
+      lastModifiedDate: '2019-01-02T03:04:05.06Z'
     }
   ): { snapshotContentItemSpy: jest.SpyInstance; contentItem: ContentItem } {
     const snapshotContentItemSpy = jest.spyOn(snapshot.related, 'snapshotContentItem');
@@ -284,6 +288,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new WebhookSnapshot({
             id: 'snapshot-id',
+            createdDate: '2019-01-02T03:04:05.06Z',
             rootContentItem: {
               id: 'content-item-id',
               body: {
@@ -298,6 +303,8 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           })
         })
       );
+
+      jest.spyOn(Date, 'now').mockImplementation((): number => 1558531107888);
 
       const response = await SnapshotPublishedWebhook.processWebhook(request, fakePresenter);
 
@@ -317,7 +324,16 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       const label = contentItem.body.label;
       const objectID = contentItem.id;
       const publishedDate = new Date().toISOString();
-      const addedObject = { description, label, objectID, publishedDate };
+      const addedObject = {
+        description,
+        label,
+        objectID,
+        publishedDate,
+        _contentItemCreatedDate: 1546398245,
+        _contentItemLastModifiedDate: 1546398245,
+        _lastModifiedDate: 1558531107,
+        _snapshotCreatedDate: 1546398245
+      };
       expect(mockAddObject).toHaveBeenCalledWith(addedObject);
 
       expect(response).toEqual(SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE);
@@ -355,6 +371,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new WebhookSnapshot({
             id: 'snapshot-id',
+            createdDate: '2019-01-02T03:04:05.06Z',
             rootContentItem: {
               id: 'content-item-id',
               body: {
@@ -386,7 +403,15 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
       const objectID = contentItem.id;
       const publishedDate = new Date().toISOString();
-      const addedObject = { ...contentItem.body, objectID, publishedDate };
+      const addedObject = {
+        ...contentItem.body,
+        objectID,
+        publishedDate,
+        _contentItemCreatedDate: 1546398245,
+        _contentItemLastModifiedDate: 1546398245,
+        _lastModifiedDate: 1558531107,
+        _snapshotCreatedDate: 1546398245
+      };
       expect(mockAddObject).toHaveBeenCalledWith(addedObject);
 
       expect(response).toEqual(SUCCESSFULLY_ADDED_TO_INDEX_RESPONSE);
@@ -425,6 +450,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new WebhookSnapshot({
             id: 'snapshot-id',
+            createdDate: '2019-01-02T03:04:05.06Z',
             rootContentItem: {
               id: 'content-item-id',
               body: {
@@ -493,6 +519,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new WebhookSnapshot({
             id: 'snapshot-id',
+            createdDate: '2019-01-02T03:04:05.06Z',
             rootContentItem: {
               id: contentItem.id,
               body: contentItem.body
@@ -555,6 +582,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new WebhookSnapshot({
             id: 'snapshot-id',
+            createdDate: '2019-01-02T03:04:05.06Z',
             rootContentItem: {
               id: contentItem.id,
               body: contentItem.body
@@ -611,6 +639,7 @@ describe('SnapshotPublishedWebhook spec', (): void => {
           name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
           payload: new WebhookSnapshot({
             id: 'snapshot-id',
+            createdDate: '2019-01-02T03:04:05.06Z',
             rootContentItem: {
               id: 'content-item-id',
               body: {

@@ -84,7 +84,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       const req: express.Request = mocks.createRequest({
@@ -110,7 +114,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       const req: express.Request = mocks.createRequest({
@@ -137,7 +145,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
 
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       const req: express.Request = mocks.createRequest({
@@ -158,7 +170,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the invalidWebhookRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -185,7 +201,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the unsupportedWebhookError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -212,7 +232,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the dynamicContentRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -239,7 +263,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the noMatchingContentTypeSchemaError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -266,7 +294,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the noMatchingContentTypePropertyError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       mockProcessWebhook.mockImplementationOnce(
@@ -293,7 +325,11 @@ describe('SnapshotPublishedRouteHandler', (): void => {
     it('Should call the algoliaSearchRequestError presenter method', async (): Promise<void> => {
       const webhookRequest: WebhookRequest = new WebhookRequest({
         name: SnapshotPublishedWebhook.SUPPORTED_WEBHOOK_NAME,
-        payload: new WebhookSnapshot({ id: 'snapshot-id', rootContentItem: { id: 'content-item-id', body: {} } })
+        payload: new WebhookSnapshot({
+          id: 'snapshot-id',
+          createdDate: '2019-01-02T03:04:05.06Z',
+          rootContentItem: { id: 'content-item-id', body: {} }
+        })
       });
 
       mockProcessWebhook.mockImplementationOnce(

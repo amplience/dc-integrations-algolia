@@ -44,6 +44,8 @@ export interface SnapshotPublishedWebhookPresenter<T> {
   successfullyAddedToIndex(algoliaIndexName: string, addedObject: AlgoliaObject): T;
 }
 
+const getUnixTime = (date: Date): number => (date.getTime() / 1000) | 0;
+
 export class SnapshotPublishedWebhook {
   public static readonly SUPPORTED_WEBHOOK_NAME = 'dynamic-content.snapshot.published';
 
@@ -96,6 +98,10 @@ export class SnapshotPublishedWebhook {
 
     const objectToAddToIndex: AlgoliaObject = {
       ...includedProperties.reduce((obj, prop): object => ({ ...obj, [prop]: contentItem.body[prop] }), {}),
+      _lastModifiedDate: (Date.now() / 1000) | 0,
+      _snapshotCreatedDate: getUnixTime(new Date(request.webhook.payload.createdDate)),
+      _contentItemCreatedDate: getUnixTime(new Date(contentItem.createdDate)),
+      _contentItemLastModifiedDate: getUnixTime(new Date(contentItem.lastModifiedDate)),
       objectID: contentItem.id,
       publishedDate: new Date().toISOString()
     };

@@ -36,6 +36,8 @@ describe('end-to-end', (): void => {
 
     nock.load(`${__dirname}/__fixtures__/nocks.json`);
 
+    jest.spyOn(Date, 'now').mockImplementation((): number => 1558531107888);
+
     await request(getApp())
       .post('/webhook')
       .set('Content-Type', 'application/json')
@@ -47,8 +49,15 @@ describe('end-to-end', (): void => {
       .expect(200, {
         message: `Successfully added to index "${process.env.ALGOLIA_INDEX_NAME}"`,
         addedObject: {
-          _meta: { name: 'text-area-en', schema: 'http://schema-id1.json' },
+          _meta: {
+            name: 'text-area-en',
+            schema: 'http://schema-id1.json'
+          },
           text1: 'Text area EN - 10:18',
+          _lastModifiedDate: 1558531107,
+          _snapshotCreatedDate: 1557392294,
+          _contentItemCreatedDate: 1544449310,
+          _contentItemLastModifiedDate: 1557478081,
           objectID: '84a68172-bc22-48ad-b64a-4ae808bb13fe',
           publishedDate: '2019-07-15T00:00:00.000Z'
         }
