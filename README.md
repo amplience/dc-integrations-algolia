@@ -108,6 +108,8 @@ For development purposes you can use the awesome [ngrok](https://ngrok.com/), wh
 
 3. Enter & save your webhook.
     * For this integration the URL must end in "/webhook"
+      * If you are running locally this will be the URL that was specified when exposing it via ngrok
+      * When deploying the app to Heroku, this will be the URL under domain section in the settings ("Settings" -> "Domains and certificates")
     * Your secret must match the one you defined in step 1.
     * You must select the "Snapshot - published" with Webhook trigger 
 
