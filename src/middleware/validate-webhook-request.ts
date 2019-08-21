@@ -3,7 +3,7 @@ import { WebhookSignature } from 'dc-management-sdk-js';
 import * as express from 'express';
 import { BadRequestError } from '../errors/bad-request-error';
 import * as debug from 'debug';
-import { InvalidWebhookSecretError } from '../errors/invalid-webhook-secret-error';
+import { InvalidWebhookSignatureError } from '../errors/invalid-webhook-signature-error';
 
 const log = debug('dc-integrations-algolia:validate-webhook-request');
 
@@ -27,7 +27,7 @@ export default class ValidateWebhookRequest {
         const calculatedSignature: string = WebhookSignature.calculate(buf, webhooksecret);
         if (suppliedSignature !== calculatedSignature) {
           log('Invalid webhook signature - Please check the your webhook secret');
-          throw new InvalidWebhookSecretError(webhooksecret);
+          throw new InvalidWebhookSignatureError();
         }
         log('Validated webhook signature');
       }

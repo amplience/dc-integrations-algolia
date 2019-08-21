@@ -6,6 +6,7 @@ import {
   SnapshotPublishedWebhookPresenter,
   SnapshotPublishedWebhookRequest
 } from './snapshot-published-webhook';
+import * as mockDate from '../../test/helpers/mock-date';
 
 const mockDynamicContent = jest.fn();
 jest.mock(
@@ -101,6 +102,19 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       noMatchingContentTypePropertiesError = jest.spyOn(fakePresenter, 'noMatchingContentTypePropertiesError');
       algoliaSearchRequestError = jest.spyOn(fakePresenter, 'algoliaSearchRequestError');
       successfullyAddedToIndexResponse = jest.spyOn(fakePresenter, 'successfullyAddedToIndex');
+    }
+  );
+
+  beforeAll(
+    (): void => {
+      mockDate.setup();
+    }
+  );
+
+  afterAll(
+    (): void => {
+      mockDate.restore();
+      jest.restoreAllMocks();
     }
   );
 
@@ -309,10 +323,12 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       const description = contentItem.body.description;
       const label = contentItem.body.label;
       const objectID = contentItem.id;
+      const publishedDate = new Date().toISOString();
       const addedObject = {
         description,
         label,
         objectID,
+        publishedDate,
         _contentItemCreatedDate: 1546398245,
         _contentItemLastModifiedDate: 1546398245,
         _lastModifiedDate: 1558531107,
@@ -386,9 +402,11 @@ describe('SnapshotPublishedWebhook spec', (): void => {
       expect(mockAlgoliasearch).toHaveBeenCalledWith(ALGOLIA_APPLICATION_ID, ALGOLIA_WRITE_API_KEY);
       expect(mockInitIndex).toHaveBeenCalledWith(ALGOLIA_INDEX_NAME);
       const objectID = contentItem.id;
+      const publishedDate = new Date().toISOString();
       const addedObject = {
         ...contentItem.body,
         objectID,
+        publishedDate,
         _contentItemCreatedDate: 1546398245,
         _contentItemLastModifiedDate: 1546398245,
         _lastModifiedDate: 1558531107,

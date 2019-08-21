@@ -23,6 +23,7 @@ export class SnapshotPublishedWebhookRequest {
 
 export interface AlgoliaObject {
   objectID: string;
+  publishedDate: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
@@ -101,7 +102,8 @@ export class SnapshotPublishedWebhook {
       _snapshotCreatedDate: getUnixTime(new Date(request.webhook.payload.createdDate)),
       _contentItemCreatedDate: getUnixTime(new Date(contentItem.createdDate)),
       _contentItemLastModifiedDate: getUnixTime(new Date(contentItem.lastModifiedDate)),
-      objectID: contentItem.id
+      objectID: contentItem.id,
+      publishedDate: new Date().toISOString()
     };
     const algoliaIndexName = request.algolia.indexName;
     try {

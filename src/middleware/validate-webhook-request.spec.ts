@@ -15,7 +15,7 @@ jest.mock(
 import * as mocks from 'node-mocks-http';
 import ValidateWebhookRequest from './validate-webhook-request';
 import { NextHandleFunction } from 'connect';
-import { InvalidWebhookSecretError } from '../errors/invalid-webhook-secret-error';
+import { InvalidWebhookSignatureError } from '../errors/invalid-webhook-signature-error';
 
 describe('ValidateWebhookRequest', (): void => {
   beforeEach(
@@ -132,8 +132,8 @@ describe('ValidateWebhookRequest', (): void => {
       try {
         await invokeExpressJsonMiddleware();
       } catch (err) {
-        expect(err).toBeInstanceOf(InvalidWebhookSecretError);
-        expect(err.message).toEqual('Invalid Webhook Secret: webhook-secret');
+        expect(err).toBeInstanceOf(InvalidWebhookSignatureError);
+        expect(err.message).toEqual('Bad Request');
       }
     });
   });
