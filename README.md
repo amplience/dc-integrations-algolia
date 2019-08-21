@@ -14,6 +14,8 @@ The rationale behind the structure of this project is to make components reusabl
 
 An example of our implemented presenter can be found [here](src/webhooks/snapshot-published-webhook-route-handler.ts).
 
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 ## _Warning_ 
 
 * These following steps are just demonstrating how you can run this application for DEVELOPMENT purposes only.
@@ -52,29 +54,30 @@ The below command will run unit tests for the project and cover:
 npm run test
 ```
 
+## Running on Heroku
+Running the application on Heroku is no different to running it locally except that Heroku does all the installation of packages, runs the application upon deployment and exposes the application externally.
+We therefore recommend following the development running guide and skip sections 2 and 3. Please take note that there is a required environment variable to run the application on Heroku, 
+that is not required for running the application normally. 
+
 ## Running in Development mode 
 
 ### 1. Configure your environment
 
-Configuration values required to run the application should be saved in a `.env` file within the root of the project. Example is shown below:
+Configuration values required to run the application should be saved in a `.env` file within the root of the project . 
+The configurable parameters and where they can be found are listed in the table below:
 
-```bash
-DC_CLIENT_ID=my-dc-client-id
-DC_CLIENT_SECRET=my-dc-secret
-WEBHOOK_SECRET=dc-webhook-secret
-ALGOLIA_APPLICATION_ID=my-app-id
-ALGOLIA_API_KEY=my-api-key
-ALGOLIA_INDEX_NAME=my-index-name
-CONTENT_TYPE_WHITELIST=schema-id1;schema-id2;schema-id3
-CONTENT_TYPE_PROPERTY_WHITELIST=prop1;prop2;prop3
-```
-
-#### 1.1 Using a different Dynamic Content environment
-You can override the Dynamic Content API and Amplience Auth URLs by defining these optional environment variables:
-```bash
-DC_API_URL=https://...
-DC_AUTH_URL=https://...
-```
+|  Parameter                 	            |  Example Value                     	|  Required 	|  Where to find it	                                                                                                                                                                                |
+|-----------------------------------------|-------------------------------------|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|  DC_CLIENT_ID 	                        |  amplience_dc_client__id 	          |  true       |  Request a DC client and secret for algolia integration from Amplience Support                                                                                                                  	|
+|  DC_CLIENT_SECRET 	                    |  amplience_dc_client_secret 	      |  true       |   	                                                                                                                                                                                              |
+|  DC_WEBHOOK_SECRET 	                    |  amplience_webhook_secret 	        |  true       |  You can specify any secret here and then use it as your web hook secret when you create the web hook (steps below). Alternatively you can create a web hook and paste the generated secret here	|
+|  DC_CONTENT_TYPE_WHITELIST 	            |  schema-id1;schema-id2;schema-id3; 	|  false      |  Add the content type schema ids that you want to add to your index. Semicolon-separated list or the full urls for the schemas. 	                                                                |
+|  DC_CONTENT_TYPE_PROPERTY_WHITELIST     |  prop1;prop2;prop3; 	              |  false      |  Add the content type properties that you want to add to your index. Semicolon-separated list or the full urls for the schemas. 	                                                                |
+|  DC_API_URL 	                          |  https://... 	                      |  false      |  You can use different Dynamic Content API authentication environments using this parameter	                                                                                                      |
+|  DC_AUTH_URL 	                          |  https://... 	                      |  false      |  You can use different Amplience authentication environments using this parameter                                                                                                                 |
+|  ALGOLIA_APPLICATION_ID 	              |  FL8ZBJV111 	                      |  true       |  Taken from the 'API Keys' page on the Algolia site. 	                                                                                                                                            |
+|  ALGOLIA_WRITE_API_KEY 	                |  8c2f4b6a10534481fba2a3c78417eaa5 	|  true       |  Taken from the 'API Keys' page on the Algolia site. This needs to be the Write or Admin key, not the Search key. 	                                                                              |
+|  NPM_CONFIG_PRODUCTION 	                |  false                             	|  false*     |  *This is required when deploying to Heroku and stops the devDependencies being removed. We have chosen this method of deployment to remove the requirement of bundling the application.  	      |
 
 ### 2. Start the application
 To run this application locally, run the following (default port is 3000)
@@ -113,6 +116,8 @@ For development purposes you can use the awesome [ngrok](https://ngrok.com/), wh
 
 3. Enter & save your webhook.
     * For this integration the URL must end in "/webhook"
+      * If you are running locally this will be the URL that was specified when exposing it via ngrok
+      * When deploying the app to Heroku, this will be the URL under domain section in the settings ("Settings" -> "Domains and certificates")
     * Your secret must match the one you defined in step 1.
     * You must select the "Snapshot - published" with Webhook trigger 
 

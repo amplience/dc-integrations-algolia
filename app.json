@@ -1,0 +1,52 @@
+{
+  "name": "dc-integrations-algolia",
+  "description": "A sample Amplience Dynamic Content integration for Algolia Search API",
+  "logo": "https://bytebucket.org/amplience/dc-integrations-algolia/raw/0e3db1c4896aa8053496a68ea52e24ae175da390/media/header.png?token=65caeedcb08930016f669fa0282a0b09955d7505",
+  "keywords": [
+    "node",
+    "typescript",
+    "algolia",
+    "heroku",
+    "amplience",
+    "webhook"
+  ],
+  "env": {
+    "DC_CLIENT_ID": {
+      "description": "Dynamic Content Client ID"
+    },
+    "DC_CLIENT_SECRET": {
+      "description": "Dynamic Content Secret"
+    },
+    "DC_WEBHOOK_SECRET": {
+      "description": "Secret for the webhook"
+    },
+    "DC_CONTENT_TYPE_WHITELIST": {
+      "description": "Content Type WhiteList"
+    },
+    "DC_CONTENT_TYPE_PROPERTY_WHITELIST": {
+      "description": "Content Type Property WhiteList",
+      "required": false
+    },
+    "DC_API_URL": {
+      "description": "Dynamic Content API URL",
+      "required": false
+    },
+    "DC_AUTH_URL": {
+      "description": "Amplience Auth URL",
+      "required": false
+    },
+    "ALGOLIA_APPLICATION_ID": {
+      "description": "Algolia App ID"
+    },
+    "ALGOLIA_WRITE_API_KEY": {
+      "description": "Algolia API key"
+    },
+    "ALGOLIA_INDEX_NAME": {
+      "description": "Algolia Index Name"
+    },
+    "NPM_CONFIG_PRODUCTION": {
+      "description": "Set to run the application with devDependencies",
+      "value": false
+    }
+  }
+}
