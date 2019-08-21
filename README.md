@@ -14,7 +14,7 @@ The rationale behind the structure of this project is to make components reusabl
 
 An example of our implemented presenter can be found [here](src/webhooks/snapshot-published-webhook-route-handler.ts).
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/amplience/dc-integrations-algolia)
 
 ## _Warning_ 
 
