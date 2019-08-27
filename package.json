@@ -96,7 +96,7 @@
     "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.6.0",
+    "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^7.6.0",
     "@types/algoliasearch": "^3.30.8",
     "@types/debug": "^4.1.4",
@@ -106,7 +106,7 @@
     "@types/jest": "^24.0.12",
     "@types/joi": "^14.3.3",
     "@typescript-eslint/eslint-plugin": "^1.7.0",
-    "commitizen": "^3.1.1",
+    "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.2.0",
