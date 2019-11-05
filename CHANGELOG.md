@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/amplience/dc-integrations-algolia/compare/v1.0.0...v1.1.0) (2019-11-05)
+
+
+### Bug Fixes
+
+* **heroku button:** added the repo to the button link ([aa83731](https://github.com/amplience/dc-integrations-algolia/commit/aa83731))
+* **pre-commit hooks:** fixing broken script command ([006e982](https://github.com/amplience/dc-integrations-algolia/commit/006e982))
+* **pre-commit script:** changing method signature ([0dc73ef](https://github.com/amplience/dc-integrations-algolia/commit/0dc73ef))
+* **webhook signature validation:** removed leak of sensitive data ([ab140a3](https://github.com/amplience/dc-integrations-algolia/commit/ab140a3))
+
+
+### Build System
+
+* **deps:** bump axios from 0.18.0 to 0.18.1 ([49d3809](https://github.com/amplience/dc-integrations-algolia/commit/49d3809))
+* **deps:** bump eslint-utils from 1.3.1 to 1.4.2 ([8bfc654](https://github.com/amplience/dc-integrations-algolia/commit/8bfc654))
+* **deps:** bump lodash.template from 4.4.0 to 4.5.0 ([c0e82b6](https://github.com/amplience/dc-integrations-algolia/commit/c0e82b6))
+* **lodash:** resolved lodash security alert CVE-2019-10744 ([506e093](https://github.com/amplience/dc-integrations-algolia/commit/506e093))
+
+
+### Features
+
+* **content-items:** added a publishedDate to content items when indexed ([e452d92](https://github.com/amplience/dc-integrations-algolia/commit/e452d92))
+* **date support:** the inserted algolia record now includes the various date fields ([01be7c0](https://github.com/amplience/dc-integrations-algolia/commit/01be7c0))
+* **env vars improvements:** changed the readme and aligned the code ([a7d9a89](https://github.com/amplience/dc-integrations-algolia/commit/a7d9a89))
+* **env vars improvements:** changed the readme and aligned the code ([a275c51](https://github.com/amplience/dc-integrations-algolia/commit/a275c51))
+* **heroku button:** adding app.json ([7aebf07](https://github.com/amplience/dc-integrations-algolia/commit/7aebf07))
+* **heroku deploy button:** added the deployment button to the readme ([546e77f](https://github.com/amplience/dc-integrations-algolia/commit/546e77f))
+* **readme:** added a running on heroku section ([7963f7b](https://github.com/amplience/dc-integrations-algolia/commit/7963f7b))
+* **readme:** added heroku and local webhook URL descriptions ([01ef5fe](https://github.com/amplience/dc-integrations-algolia/commit/01ef5fe))
+* **readme:** added heroku and local webhook URL descriptions ([d6a6171](https://github.com/amplience/dc-integrations-algolia/commit/d6a6171))
+* **readme:** alphebetising the env vars ([57d3171](https://github.com/amplience/dc-integrations-algolia/commit/57d3171))
+* **readme:** updated example values ([5533c18](https://github.com/amplience/dc-integrations-algolia/commit/5533c18))
+* **readme:** updated link to support ([4018236](https://github.com/amplience/dc-integrations-algolia/commit/4018236))
+* **successful webhook status code:** updated the successful status code to 200 instead of 202 ([2133148](https://github.com/amplience/dc-integrations-algolia/commit/2133148))
+
+
+### Tests
+
+* **content-items:** adding publishedDate and breaking existing tests ([66a5a60](https://github.com/amplience/dc-integrations-algolia/commit/66a5a60))
+
+
+
 ## 1.0.0 (2019-05-22)
 
 
