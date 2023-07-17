@@ -1,5 +1,3 @@
-[![Amplience Dynamic Content](media/header.png)](https://amplience.com/dynamic-content)
-
 # dc-integrations-algolia
 
 > A sample [Amplience Dynamic Content]((https://amplience.com/dynamic-content)) integration for [Algolia Search API](https://www.algolia.com/products/search/)
